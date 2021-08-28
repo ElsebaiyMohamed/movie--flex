@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">movie flex</string>
+    <string name="simple_text">Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and written
+        by Daniele Sebastian Wiedenhaupt, from a story by Hughes. The film stars Kodi Smit-McPhee as a young hunter who
+        encounters and befriends an injured wolf during the last ice age, with Jóhannes Haukur Jóhannesson as his father.</string>
+    <string name="cast">Cast</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
