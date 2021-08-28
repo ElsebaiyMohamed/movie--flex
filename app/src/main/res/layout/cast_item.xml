@@ -3,6 +3,6 @@
     android:id="@+id/img_cast"
     android:layout_width="140dp"
     android:layout_height="190dp"
-    android:layout_marginRight="8dp"
+    android:layout_marginRight="15dp"
     android:scaleType="centerCrop" />
 

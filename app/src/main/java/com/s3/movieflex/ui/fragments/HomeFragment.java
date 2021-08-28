@@ -94,6 +94,16 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
         //////////////////////////////////////////
+
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        //////////////////////////////////////////
         lstSlide.add(new Movie( "Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
         lstSlide.add(new Movie( "Alpha","sauhfwehuhufhof", R.drawable.fourth, R.drawable.fourth,"rdgrr","wewgtwe","ewwewfef",casts));
         lstSlide.add(new Movie( "Alpha","sauhfwehuhufhof", R.drawable.fifth, R.drawable.fifth,"rdgrr","wewgtwe","ewwewfef",casts));
@@ -174,12 +184,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra("title", movie.getTitle());
-        intent.putExtra("imgUrl", movie.getThumbnai());
-        intent.putExtra("desc", "Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and written\n" +
-                "        by Daniele Sebastian Wiesenthal, from a story by Hughes. The film stars Kodi Smit-McPhee as a young hunter who \n" +
-                "        encounters and befriends an injured wolf during the last ice age, with Jóhannes Haukur Jóhannesson as his father.");
-        intent.putExtra("imgCover", movie.getCover());
+
+        intent.putExtra("movie",movie);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());

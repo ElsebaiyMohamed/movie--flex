@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.s3.movieflex.R;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.model.Slide;

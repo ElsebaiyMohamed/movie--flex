@@ -1,6 +1,8 @@
 package com.s3.movieflex.model;
 
-public class Cast {
+import java.io.Serializable;
+
+public class Cast implements Serializable {
     String name;
     int imgLink;
 

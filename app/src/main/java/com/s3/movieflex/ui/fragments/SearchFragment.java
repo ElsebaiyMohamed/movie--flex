@@ -70,7 +70,17 @@ public class SearchFragment extends Fragment implements MovieItemClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+
         //test
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        ///////////////////////////////////////////////////
         film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
         film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
         film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
@@ -90,11 +100,8 @@ public class SearchFragment extends Fragment implements MovieItemClickListener {
         if(getActivity()!=null) {
 
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-            intent.putExtra("title", movie.getTitle());
-            intent.putExtra("imgUrl", movie.getThumbnai());
-            intent.putExtra("imgCover", movie.getCover());
-            intent.putExtra("desc", movie.getDescription());
-            intent.putExtra("Trail", movie.getStremingLink());
+            intent.putExtra("movie",movie);
+
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
             startActivity(intent, options.toBundle());
         }

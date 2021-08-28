@@ -7,14 +7,17 @@
     android:orientation="vertical"
     tools:context=".ui.fragments.SearchFragment">
 
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Movie Name"
+        android:layout_margin="10dp"
+
+        android:background="@drawable/search_shape"
         android:iconifiedByDefault="false"
-        android:background="@color/light_blue"
-        tools:context=".fragments.FavoriteFragment" />
+        android:paddingLeft="10dp"
+        android:queryHint="Movie Name" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_result"
