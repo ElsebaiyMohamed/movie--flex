@@ -57,8 +57,11 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
     MovieFavAdapter adapter;
     ArrayList<Movie> film = new ArrayList<>();
-    ArrayList<Cast> casts=new ArrayList<>();
+    ArrayList<Cast> casts = new ArrayList<>();
     RecyclerView favoriteMovies;
+    String s = "Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and written by Daniele " +
+            "Sebastian Wiedenhaupt, from a story by Hughes. The film stars Kodi Smit-McPhee as a young hunter who encounters" +
+            " and befriends an injured wolf during the last ice age, with Jóhannes Haukur Jóhannesson as his father.";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,22 +69,22 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         //test
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
-            casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
+        casts.add(new Cast("tom", R.drawable.eight));
 
 
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
 
         //favorite RecyclerView adapter and arrayList
         adapter = new MovieFavAdapter(film, (MovieItemClickListener) this);
