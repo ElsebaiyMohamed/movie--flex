@@ -10,17 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.s3.movieflex.R;
 import com.s3.movieflex.model.Movie;
-import com.s3.movieflex.model.Slide;
 
 import java.util.ArrayList;
 
 public class SliderPagerAdapter extends PagerAdapter {
-    private Context mContext;
-    private ArrayList<Movie> mList =new ArrayList<>();
-    private  MovieItemClickListener movieItemClickListener;
+    private final Context mContext;
+    private ArrayList<Movie> mList = new ArrayList<>();
+    private final MovieItemClickListener movieItemClickListener;
 
     public SliderPagerAdapter(Context mContext, ArrayList<Movie> mList,MovieItemClickListener movieItemClickListener) {
         this.mContext = mContext;
@@ -35,7 +33,7 @@ public class SliderPagerAdapter extends PagerAdapter {
         View slideLayout =inflater.inflate(R.layout.slide_item,container,false);
         ImageView slideImg =slideLayout.findViewById(R.id.slide_img);
         TextView  slideText =slideLayout.findViewById(R.id.slide_title);
-        slideImg.setImageResource(mList.get(position).getThumbnai());
+        slideImg.setImageResource(mList.get(position).getThumbnail());
         slideText.setText(mList.get(position).getTitle());
         slideImg.setOnClickListener(new View.OnClickListener() {
             @Override

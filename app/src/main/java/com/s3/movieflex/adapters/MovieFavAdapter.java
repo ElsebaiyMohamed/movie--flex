@@ -47,7 +47,7 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
         holder.fTitle.setText(film.getTitle());
         holder.fRate.setText(film.getRating() + "/10");
         holder.fStudio.setText(film.getStudio());
-        holder.fImage.setImageResource(film.getThumbnai());
+        holder.fImage.setImageResource(film.getThumbnail());
 
 
     }
@@ -61,9 +61,9 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
     // our inner class that holds the items which we want draw and implements the on click listener on them
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //the first item
-        private TextView fTitle;
-        private TextView fStudio;
-        private TextView fRate;
+        private final TextView fTitle;
+        private final TextView fStudio;
+        private final TextView fRate;
 
         //the second item
         private final ImageView fImage;

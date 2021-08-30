@@ -19,7 +19,6 @@ import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
-
 import java.util.ArrayList;
 
 
@@ -81,12 +80,12 @@ public class SearchFragment extends Fragment implements MovieItemClickListener {
         casts.add(new Cast("tom", R.drawable.eight));
         casts.add(new Cast("tom", R.drawable.eight));
         ///////////////////////////////////////////////////
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
-        film.add(new Movie("Alpha","sauhfwehuhufhof", R.drawable.eight, R.drawable.eight,"rdgrr","wewgtwe","ewwewfef",casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 1.0F, "ewwewfef", casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 5.0f, "ewwewfef", casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 9.5f, "ewwewfef", casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 6f, "ewwewfef", casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 6.5f, "ewwewfef", casts));
+        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 5.1f, "ewwewfef", casts));
 
         adapter = new MovieFavAdapter(film, (MovieItemClickListener) this);
         search_result = view.findViewById(R.id.search_result);

@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.R;
+import com.s3.movieflex.model.Movie;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
    static   MovieItemClickListener movieItemClickListener;
 
     public MovieAdapter(ArrayList<Movie> fList,MovieItemClickListener listener) {
-        this.fList = fList;
-        movieItemClickListener=listener;
+        MovieAdapter.fList = fList;
+        movieItemClickListener = listener;
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Movie film = fList.get(position);
         //assign the data to each view element
         holder.fTitle.setText(film.getTitle());
-        holder.fImage.setImageResource(film.getThumbnai());
+        holder.fImage.setImageResource(film.getThumbnail());
 
 
 

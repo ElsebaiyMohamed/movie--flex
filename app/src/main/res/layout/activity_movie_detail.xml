@@ -25,44 +25,6 @@
             tools:ignore="ImageContrastCheck"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <com.github.ivbaranov.mfb.MaterialFavoriteButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:id="@+id/fav_btn"
-            app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.955"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="MissingConstraints"
-
-            app:mfb_animate_favorite="true"
-            app:mfb_animate_unfavorite="false"
-            app:mfb_padding="12"
-            app:mfb_favorite_image="@drawable/ic_baseline_favorite_red"
-            app:mfb_not_favorite_image="@drawable/ic_baseline_favorite"
-            app:mfb_rotation_duration="400"
-            app:mfb_rotation_angle="360"
-            app:mfb_bounce_duration="300"
-            app:mfb_color="white"
-            app:mfb_type="heart"
-            app:mfb_size="70"
-            />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:contentDescription="TODO"
-            app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/gradient_color"
-            tools:ignore="ImageContrastCheck" />
-
         <ImageView
             android:id="@+id/detail_movie_img"
             android:layout_width="125dp"
@@ -147,6 +109,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/detail_movie_cover"
             app:srcCompat="@android:drawable/ic_media_play" />
+
+        <ImageButton
+            android:id="@+id/fav_btn"
+            android:layout_width="53dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/ic_baseline_favorite"
+
+            app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.953"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.s3.movieflex.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieFavAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
+import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.ui.MovieDetailActivity;
@@ -59,51 +61,45 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
     ArrayList<Movie> film = new ArrayList<>();
     ArrayList<Cast> casts = new ArrayList<>();
     RecyclerView favoriteMovies;
-    String s = "Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and written by Daniele " +
-            "Sebastian Wiedenhaupt, from a story by Hughes. The film stars Kodi Smit-McPhee as a young hunter who encounters" +
-            " and befriends an injured wolf during the last ice age, with Jóhannes Haukur Jóhannesson as his father.";
+    DbController controller;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         //test
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-
-
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        film.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        controller = new DbController(getContext());
+        controller.open();
 
         //favorite RecyclerView adapter and arrayList
+        film.clear();
+
+        film = controller.selectAllMovie();
+
         adapter = new MovieFavAdapter(film, (MovieItemClickListener) this);
         favoriteMovies = view.findViewById(R.id.fav);
         favoriteMovies.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         favoriteMovies.setAdapter(adapter);
-
         return view;
     }
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-            intent.putExtra("movie",movie);
+            intent.putExtra("movie", movie);
 
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
             startActivity(intent, options.toBundle());
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        controller.close();
+
+    }
 }

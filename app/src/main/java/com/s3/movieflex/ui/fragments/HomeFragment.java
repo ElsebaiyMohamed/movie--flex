@@ -18,6 +18,7 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.SliderPagerAdapter;
+import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.ui.MovieDetailActivity;
@@ -72,6 +73,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     ArrayList<Movie> lstTvOnAir = new ArrayList<>();
     ArrayList<Cast> casts = new ArrayList<>();
     TabLayout indicators;
+    DbController controller;
+
     RecyclerView moviesRV, moviesTop, moviesPlaying, tvTop, tvPopular, tvOnAir;
     ViewPager sliderPager;
     String s = "Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and" +
@@ -94,6 +97,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
         //////////////////////////////////////////
+        controller = new DbController(getContext());
+        controller.open();
 
         casts.add(new Cast("tom", R.drawable.adel));
         casts.add(new Cast("tom", R.drawable.helmy1));
@@ -102,40 +107,40 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         //////////////////////////////////////////
 
         // upcoming
-        lstMovie.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovie.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovie.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovie.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstMovie.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovie.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovie.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovie.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //popular movies
-        lstMoviePopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstMoviePopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //top rated movies
-        lstMovieTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstMovieTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovieTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovieTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstMovieTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //playing movies
-        lstMoviePlaying.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstMoviePlaying.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePlaying.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePlaying.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstMoviePlaying.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //top tv shows
-        lstTvTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstTvTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //popular tv shows
-        lstTvPopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstTvPopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvPopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvPopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvPopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         //on the air tv shows
-        lstTvOnAir.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", "wewgtwe", "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", "wewgtwe", "ewwewfef", casts));
+        lstTvOnAir.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvOnAir.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvOnAir.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
+        lstTvOnAir.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
         /////////////////////////////////////////////////////////////
         SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstMovie, this);
         Timer timer = new Timer();
@@ -176,8 +181,16 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        ArrayList<Movie> m = new ArrayList<>();
+        m = controller.selectAllMovie();
+        for (Movie x : m) {
 
-        intent.putExtra("movie",movie);
+            if (x.getTitle().equals(movie.getTitle())) {
+                movie.set_id(x.get_id());
+                break;
+            }
+        }
+        intent.putExtra("movie", movie);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
@@ -200,4 +213,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        controller.close();
+    }
 }
