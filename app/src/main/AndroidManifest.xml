@@ -10,17 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieFlex">
         <activity
-            android:name=".ui.MovieDetailActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="true">
+            android:name=".ui.Splash"
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.MovieDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>
