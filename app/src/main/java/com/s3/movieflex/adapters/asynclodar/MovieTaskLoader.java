@@ -1,4 +1,4 @@
-package com.s3.movieflex.adapters.asyncLoader;
+package com.s3.movieflex.adapters.asynclodar;
 
 import android.content.Context;
 
@@ -17,9 +17,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -46,10 +45,9 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
         try {
             String jsonString = getHttpRequest(new URL(frontLink + url + backLink));
             JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray jsonArray = new JSONArray("results");
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
+            final int resultLength = jsonArray.length();
+            for (int i = 0; i < resultLength; i++) {
                 JSONObject movies = jsonArray.getJSONObject(i);
                 int id = movies.getInt("id");
                 double rate = movies.getDouble("vote_average");
@@ -60,28 +58,24 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
                 String jsonTrial = getHttpRequest(new URL(frontLink + id + trial + backLink));
                 JSONObject trialObject = new JSONObject(jsonTrial);
-                JSONArray trialArray = new JSONArray("results");
                 String trial1 = null;
-                for (int j = 0; j < trialArray.length(); j++) {
-                    JSONObject trial2 = jsonArray.getJSONObject(j);
-                    trial1=UTubeLink+trial2.getString("key");
-                }
+                if (trialObject.has("key"))
+                    trial1 = UTubeLink + trialObject.getString("key");
+
 
                 String jsonCast = getHttpRequest(new URL(frontLink + id + actors + backLink));
                 JSONObject castObject = new JSONObject(jsonCast);
-                JSONArray castArray = new JSONArray("cast");
-                ArrayList<Cast> actorsList= new ArrayList<>();
-                for (int j = 0; j < castArray.length(); j++) {
-                    JSONObject cast2 = jsonArray.getJSONObject(j);
-                    actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
+                JSONArray castArray = castObject.getJSONArray("cast");
+                ArrayList<Cast> actorsList = new ArrayList<>();
+                final int castLength = castArray.length();
+                for (int j = 0; j < castLength; j++) {
+                    JSONObject cast2 = castArray.getJSONObject(j);
+                    if (cast2.has("name"))
+                        actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
                 }
-                this.movies.add(new Movie(-1 ,id, title, description, poster, coverLink, rate,trial1,actorsList));
+                this.movies.add(new Movie(-1, id, title, description, poster, coverLink, rate, trial1, actorsList));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
         return movies;
@@ -116,7 +110,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     private String readInputStream(InputStream inputStream) throws IOException {
         StringBuilder result = new StringBuilder();
         if (inputStream != null) {
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BufferedReader inputReader = new BufferedReader(inputStreamReader);
             String line = inputReader.readLine();
             while (line != null) {

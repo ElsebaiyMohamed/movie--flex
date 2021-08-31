@@ -3,6 +3,7 @@ package com.s3.movieflex.ui.fragments;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.SliderPagerAdapter;
+import com.s3.movieflex.adapters.asynclodar.MovieTaskLoader;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
@@ -77,9 +79,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     RecyclerView moviesRV, moviesTop, moviesPlaying, tvTop, tvPopular, tvOnAir;
     ViewPager sliderPager;
-    String s = "Alpha is a 2018 American prehistorical adventure film directed by Albert Hughes and" +
-            " written by Daniele Sebastian Wiedenhaupt, from a story by Hughes. The film stars Kod" +
-            "Smit-McPhee as a young hunter who encounters and befriends an injured wolf during the last ice age, with Jóhannes Haukur Jóhannesson as his father";
 
 
     @Override
@@ -87,7 +86,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         indicators = view.findViewById(R.id.indicators);
         sliderPager = view.findViewById(R.id.slider_pager);
         moviesRV = view.findViewById(R.id.Rv_movies);
@@ -96,10 +96,10 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvTop = view.findViewById(R.id.Rv_tv_top);
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
-
+        MovieTaskLoader loader = new MovieTaskLoader(requireContext(), "top_rated");
+        lstMovie = loader.loadInBackground();
         controller = new DbController(getContext());
         controller.open();
-
 
 
         SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstMovie, this);
@@ -154,10 +154,11 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
     }
-    public  class SliderTimer extends TimerTask {
+
+    public class SliderTimer extends TimerTask {
         @Override
         public void run() {
-            if(getActivity()!=null) {
+            if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

@@ -31,7 +31,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     ImageButton favorite;
     String trail;
     DbController controller;
-    private final String baseURL="https://image.tmdb.org/t/p/original";
+    private final String baseURL = "https://image.tmdb.org/t/p/original";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +65,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             } else {
                 favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
             }
-            Glide.with(this).load(baseURL+movieDetail.getThumbnail()).into(movieImg);
-            Glide.with(this).load(baseURL+movieDetail.getCover()).into(movieCover);
+            Glide.with(this).load(baseURL + movieDetail.getThumbnail()).into(movieImg);
+            Glide.with(this).load(baseURL + movieDetail.getCover()).into(movieCover);
             trail = movieDetail.getStreamingLink();
             movieTitle.setText(movieDetail.getTitle());
             movieDesc.setText(movieDetail.getDescription());
@@ -75,7 +76,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(movieDetail.getTitle());
 
 
-            castAdapter = new CastAdapter(this,cast);
+            castAdapter = new CastAdapter(this, cast);
             rvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rvCast.setAdapter(castAdapter);
 
