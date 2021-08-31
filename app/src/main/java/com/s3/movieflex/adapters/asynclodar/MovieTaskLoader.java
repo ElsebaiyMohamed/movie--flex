@@ -27,15 +27,18 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
     ArrayList<Movie> movies = new ArrayList<>();
     String url = null;
-    final String frontLink = "https://api.themoviedb.org/3/movie/";
+    final String frontLink = "https://api.themoviedb.org/3/";
+
     final String backLink = "?api_key=452671fab9e5a7eb0349b6139855d282";
     final String trial = "/videos";
     final String actors = "/credits";
     final String UTubeLink = "https://www.youtube.com/watch?v=";
+    final String tag;
 
-    public MovieTaskLoader(@NonNull Context context, String url) {
+    public MovieTaskLoader(@NonNull Context context, String url, String tag) {
         super(context);
         this.url = url;
+        this.tag = tag;
     }
 
     @Nullable
@@ -43,7 +46,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     public ArrayList<Movie> loadInBackground() {
         // Parsing JSON Object
         try {
-            String jsonString = getHttpRequest(new URL(frontLink + url + backLink));
+            String jsonString = getHttpRequest(new URL(frontLink + tag + url + backLink));
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             final int resultLength = jsonArray.length();
@@ -51,19 +54,20 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                 JSONObject movies = jsonArray.getJSONObject(i);
                 int id = movies.getInt("id");
                 double rate = movies.getDouble("vote_average");
-                String title = movies.getString("title");
+                String title = null;
+                title = movies.getString("title");
                 String coverLink = movies.getString("backdrop_path");
                 String poster = movies.getString("poster_path");
                 String description = movies.getString("overview");
 
-                String jsonTrial = getHttpRequest(new URL(frontLink + id + trial + backLink));
+                String jsonTrial = getHttpRequest(new URL(frontLink + tag + id + trial + backLink));
                 JSONObject trialObject = new JSONObject(jsonTrial);
                 String trial1 = null;
                 if (trialObject.has("key"))
                     trial1 = UTubeLink + trialObject.getString("key");
 
 
-                String jsonCast = getHttpRequest(new URL(frontLink + id + actors + backLink));
+                String jsonCast = getHttpRequest(new URL(frontLink + tag + id + actors + backLink));
                 JSONObject castObject = new JSONObject(jsonCast);
                 JSONArray castArray = castObject.getJSONArray("cast");
                 ArrayList<Cast> actorsList = new ArrayList<>();
@@ -88,8 +92,8 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
         try {
             urlConnection = (HttpsURLConnection) url.openConnection();  // open connection + casting to HTTPS
             urlConnection.setRequestMethod("GET");                      // Type of connection is getting data
-            urlConnection.setReadTimeout(10000);                        // Get Data Time = 10 seconds
-            urlConnection.setConnectTimeout(20000);                     // Bad Connection Time = 20 seconds
+            urlConnection.setReadTimeout(5000);                        // Get Data Time = 10 seconds
+            urlConnection.setConnectTimeout(10000);                     // Bad Connection Time = 20 seconds
             urlConnection.connect();
             inputStream = urlConnection.getInputStream();
             jsonResponse = readInputStream(inputStream);

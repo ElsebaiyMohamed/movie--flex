@@ -21,7 +21,6 @@ import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.SliderPagerAdapter;
 import com.s3.movieflex.adapters.asynclodar.MovieTaskLoader;
 import com.s3.movieflex.adapters.sqlite.DbController;
-import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
@@ -56,14 +55,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private final String movieTag = "movie/";
 
 
     ArrayList<Movie> lstMovie = new ArrayList<>();
@@ -73,13 +65,23 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     ArrayList<Movie> lstTvTop = new ArrayList<>();
     ArrayList<Movie> lstTvPopular = new ArrayList<>();
     ArrayList<Movie> lstTvOnAir = new ArrayList<>();
-    ArrayList<Cast> casts = new ArrayList<>();
     TabLayout indicators;
     DbController controller;
 
     RecyclerView moviesRV, moviesTop, moviesPlaying, tvTop, tvPopular, tvOnAir;
     ViewPager sliderPager;
+    private final String tvTag = "tv/";
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+
+
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,12 +98,11 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvTop = view.findViewById(R.id.Rv_tv_top);
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
-        MovieTaskLoader loader = new MovieTaskLoader(requireContext(), "top_rated");
-        lstMovie = loader.loadInBackground();
+
         controller = new DbController(getContext());
         controller.open();
-
-
+        MovieTaskLoader loader = new MovieTaskLoader(requireContext(), "upcoming", movieTag);
+        lstMovie = loader.loadInBackground();
         SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstMovie, this);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 4000, 6000);
@@ -110,26 +111,46 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
 
         //popular movies
-        MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMovie, this);
+        MovieTaskLoader loader1 = new MovieTaskLoader(requireContext(), "popular", movieTag);
+        lstMoviePopular = loader1.loadInBackground();
+        MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, this);
         moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesRV.setAdapter(adapter1);
+
+
         //top rated movies
+        MovieTaskLoader loader2 = new MovieTaskLoader(requireContext(), "top_rated", movieTag);
+        lstMovieTop = loader2.loadInBackground();
         MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, this);
         moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesTop.setAdapter(adapter2);
+
+
         //playing movies
+        MovieTaskLoader loader3 = new MovieTaskLoader(requireContext(), "now_playing", movieTag);
+        lstMoviePlaying = loader3.loadInBackground();
         MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, this);
         moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesPlaying.setAdapter(adapter3);
+
+
         //top tv shows
+        MovieTaskLoader loader4 = new MovieTaskLoader(requireContext(), "top_rated", tvTag);
+        lstTvTop = loader4.loadInBackground();
         MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, this);
         tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvTop.setAdapter(adapter4);
+
         //popular tv
+        MovieTaskLoader loader5 = new MovieTaskLoader(requireContext(), "popular", tvTag);
+        lstTvPopular = loader5.loadInBackground();
         MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, this);
         tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvPopular.setAdapter(adapter5);
+
         //on the air tv
+        MovieTaskLoader loader6 = new MovieTaskLoader(requireContext(), "on_the_air", tvTag);
+        lstTvOnAir = loader6.loadInBackground();
         MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, this);
         tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvOnAir.setAdapter(adapter6);
@@ -154,6 +175,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
     }
+
 
     public class SliderTimer extends TimerTask {
         @Override
