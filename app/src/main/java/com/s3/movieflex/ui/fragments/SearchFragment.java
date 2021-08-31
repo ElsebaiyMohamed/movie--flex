@@ -21,8 +21,6 @@ import com.s3.movieflex.ui.MovieDetailActivity;
 
 import java.util.ArrayList;
 
-
-
 public class SearchFragment extends Fragment implements MovieItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match

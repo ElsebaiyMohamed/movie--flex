@@ -28,7 +28,6 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     ArrayList<Movie> movies = new ArrayList<>();
     String url = null;
     final String frontLink = "https://api.themoviedb.org/3/";
-
     final String backLink = "?api_key=452671fab9e5a7eb0349b6139855d282";
     final String trial = "/videos";
     final String actors = "/credits";
