@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class Cast implements Serializable {
     String name;
-    int imgLink;
+    String imgLink;
 
-    public Cast(String name, int imgLink) {
+    public Cast(String name, String imgLink) {
         this.name = name;
         this.imgLink = imgLink;
     }
@@ -19,11 +19,11 @@ public class Cast implements Serializable {
         this.name = name;
     }
 
-    public int getImgLink() {
+    public String getImgLink() {
         return imgLink;
     }
 
-    public void setImgLink(int imgLink) {
+    public void setImgLink(String imgLink) {
         this.imgLink = imgLink;
     }
 }

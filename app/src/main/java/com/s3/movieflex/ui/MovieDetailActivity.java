@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.CastAdapter;
 import com.s3.movieflex.adapters.sqlite.DbController;
@@ -30,7 +31,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     ImageButton favorite;
     String trail;
     DbController controller;
-
+    private final String baseURL="https://image.tmdb.org/t/p/original";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +63,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 movieDetail.set_id(-1);
             } else {
                 favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
-
             }
-            movieImg.setImageResource(movieDetail.getThumbnail());
-            movieCover.setImageResource(movieDetail.getCover());
+            Glide.with(this).load(baseURL+movieDetail.getThumbnail()).into(movieImg);
+            Glide.with(this).load(baseURL+movieDetail.getCover()).into(movieCover);
             trail = movieDetail.getStreamingLink();
             movieTitle.setText(movieDetail.getTitle());
             movieDesc.setText(movieDetail.getDescription());
@@ -75,7 +75,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(movieDetail.getTitle());
 
 
-            castAdapter = new CastAdapter(cast);
+            castAdapter = new CastAdapter(this,cast);
             rvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rvCast.setAdapter(castAdapter);
 

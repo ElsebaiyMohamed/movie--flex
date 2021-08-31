@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
 import com.s3.movieflex.model.Movie;
 
@@ -19,6 +20,7 @@ public class SliderPagerAdapter extends PagerAdapter {
     private final Context mContext;
     private ArrayList<Movie> mList = new ArrayList<>();
     private final MovieItemClickListener movieItemClickListener;
+    private final String baseURL="https://image.tmdb.org/t/p/original";
 
     public SliderPagerAdapter(Context mContext, ArrayList<Movie> mList,MovieItemClickListener movieItemClickListener) {
         this.mContext = mContext;
@@ -33,7 +35,7 @@ public class SliderPagerAdapter extends PagerAdapter {
         View slideLayout =inflater.inflate(R.layout.slide_item,container,false);
         ImageView slideImg =slideLayout.findViewById(R.id.slide_img);
         TextView  slideText =slideLayout.findViewById(R.id.slide_title);
-        slideImg.setImageResource(mList.get(position).getThumbnail());
+        Glide.with(mContext).load(baseURL+mList.get(position).getThumbnail()).into(slideImg);
         slideText.setText(mList.get(position).getTitle());
         slideImg.setOnClickListener(new View.OnClickListener() {
             @Override

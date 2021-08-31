@@ -38,7 +38,6 @@ public class SearchFragment extends Fragment implements MovieItemClickListener {
         // Required empty public constructor
     }
 
-
     // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -69,25 +68,7 @@ public class SearchFragment extends Fragment implements MovieItemClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-
-        //test
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        casts.add(new Cast("tom", R.drawable.eight));
-        ///////////////////////////////////////////////////
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 1.0F, "ewwewfef", casts));
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 5.0f, "ewwewfef", casts));
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 9.5f, "ewwewfef", casts));
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 6f, "ewwewfef", casts));
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 6.5f, "ewwewfef", casts));
-        film.add(new Movie("Alpha", "sauhfwehuhufhof", R.drawable.eight, R.drawable.eight, "rdgrr", 5.1f, "ewwewfef", casts));
-
-        adapter = new MovieFavAdapter(film, (MovieItemClickListener) this);
+        adapter = new MovieFavAdapter(getContext(), film, (MovieItemClickListener) this);
         search_result = view.findViewById(R.id.search_result);
         search_result.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         search_result.setAdapter(adapter);

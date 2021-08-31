@@ -1,6 +1,7 @@
 package com.s3.movieflex.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
 import com.s3.movieflex.model.Movie;
 
@@ -21,10 +23,12 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
     static ArrayList<Movie> fList;
     //our custom listener te check the item clicked or no
     static MovieItemClickListener movieItemClickListener;
-
-    public MovieFavAdapter(ArrayList<Movie> fList, MovieItemClickListener listener) {
+    private final String baseURL="https://image.tmdb.org/t/p/original";
+    private final Context context;
+    public MovieFavAdapter(Context context,ArrayList<Movie> fList, MovieItemClickListener listener) {
         MovieFavAdapter.fList = fList;
         movieItemClickListener = listener;
+        this.context=context;
     }
 
     @NonNull
@@ -46,10 +50,7 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
         //assign the data to each view element
         holder.fTitle.setText(film.getTitle());
         holder.fRate.setText(film.getRating() + "/10");
-        holder.fStudio.setText(film.getStudio());
-        holder.fImage.setImageResource(film.getThumbnail());
-
-
+        Glide.with(context).load(baseURL+film.getThumbnail()).into(holder.fImage);
     }
 
     // to get number of elements on the list
@@ -60,6 +61,7 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
 
     // our inner class that holds the items which we want draw and implements the on click listener on them
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         //the first item
         private final TextView fTitle;
         private final TextView fStudio;
@@ -75,7 +77,6 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
             fTitle = (TextView) itemView.findViewById(R.id.fav_name);
             fStudio = (TextView) itemView.findViewById(R.id.fav_studio);
             fRate = (TextView) itemView.findViewById(R.id.fav_rate);
-
             fImage = (ImageView) itemView.findViewById(R.id.fav_img);
             layout=(LinearLayout) itemView.findViewById(R.id.labeled);
             //apply our listener to final view
@@ -83,14 +84,12 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()), fImage);
-
                 }
             });
             fImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()), fImage);
-
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -99,10 +98,6 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
                     movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()), fImage);
                 }
             });
-
         }
-
-
     }
 }
-

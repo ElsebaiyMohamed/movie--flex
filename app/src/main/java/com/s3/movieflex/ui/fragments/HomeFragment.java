@@ -96,87 +96,46 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvTop = view.findViewById(R.id.Rv_tv_top);
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
-        //////////////////////////////////////////
+
         controller = new DbController(getContext());
         controller.open();
 
-        casts.add(new Cast("tom", R.drawable.adel));
-        casts.add(new Cast("tom", R.drawable.helmy1));
-        casts.add(new Cast("tom", R.drawable.karim));
 
-        //////////////////////////////////////////
 
-        // upcoming
-        lstMovie.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovie.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovie.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovie.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //popular movies
-        lstMoviePopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //top rated movies
-        lstMovieTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstMovieTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //playing movies
-        lstMoviePlaying.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstMoviePlaying.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //top tv shows
-        lstTvTop.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvTop.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvTop.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvTop.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //popular tv shows
-        lstTvPopular.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvPopular.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        //on the air tv shows
-        lstTvOnAir.add(new Movie("Alpha", s, R.drawable.eight, R.drawable.eight, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Mockingly", s, R.drawable.third, R.drawable.third, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Blade Runner", s, R.drawable.first, R.drawable.first, "rdgrr", 10f, "ewwewfef", casts));
-        lstTvOnAir.add(new Movie("Black widow", s, R.drawable.fourth, R.drawable.fourth, "rdgrr", 10f, "ewwewfef", casts));
-        /////////////////////////////////////////////////////////////
         SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstMovie, this);
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 4000, 6000);
         sliderPager.setAdapter(adapter);
         indicators.setupWithViewPager(sliderPager, true);
-        ////////////////////////////////////////////////////////////////
+
+
         //popular movies
-        MovieAdapter adapter1 = new MovieAdapter(lstMovie, this);
+        MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMovie, this);
         moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesRV.setAdapter(adapter1);
         //top rated movies
-        MovieAdapter adapter2 = new MovieAdapter(lstMovieTop, this);
+        MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, this);
         moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesTop.setAdapter(adapter2);
         //playing movies
-        MovieAdapter adapter3 = new MovieAdapter(lstMoviePlaying, this);
+        MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, this);
         moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         moviesPlaying.setAdapter(adapter3);
         //top tv shows
-        MovieAdapter adapter4 = new MovieAdapter(lstTvTop, this);
+        MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, this);
         tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvTop.setAdapter(adapter4);
         //popular tv
-        MovieAdapter adapter5 = new MovieAdapter(lstTvPopular, this);
+        MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, this);
         tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvPopular.setAdapter(adapter5);
         //on the air tv
-        MovieAdapter adapter6 = new MovieAdapter(lstTvOnAir, this);
+        MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, this);
         tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         tvOnAir.setAdapter(adapter6);
 
-
         return view;
     }
-
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieImageView) {
@@ -206,7 +165,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
                             sliderPager.setCurrentItem(sliderPager.getCurrentItem() + 1);
                         else
                             sliderPager.setCurrentItem(0);
-
                     }
                 });
             }

@@ -5,14 +5,12 @@ import java.util.ArrayList;
 
 public class Movie implements Serializable {
     private long _id;
-
-
+    private int movieId;
+    private double rating;
     private String title;
     private String description;
-    private int thumbnail;
-    private int cover;
-    private String studio;
-    private float rating;
+    private String thumbnail;
+    private String cover;
     private String streamingLink;
     private ArrayList<Cast> cast;
 
@@ -22,7 +20,6 @@ public class Movie implements Serializable {
         this.title = movie.getTitle();
         this.description = movie.getDescription();
         this.thumbnail = movie.getThumbnail();
-        this.studio = movie.getStudio();
         this.rating = movie.getRating();
         this.streamingLink = movie.streamingLink;
         this.cover = movie.getCover();
@@ -33,11 +30,13 @@ public class Movie implements Serializable {
         this._id = _id;
     }
 
-    public Movie(long _id, String title, String description, int thumbnail, int cover, String studio, float rating, String stremingLink, ArrayList<Cast> cast) {
+    // MOVIE TASK LOADER
+    public Movie(long _id ,int movieId, String title, String description, String thumbnail,
+                 String cover, double rating, String stremingLink, ArrayList<Cast> cast) {
+        this.movieId=movieId;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.studio = studio;
         this.rating = rating;
         this.streamingLink = stremingLink;
         this.cover = cover;
@@ -45,24 +44,19 @@ public class Movie implements Serializable {
         this._id = _id;
     }
 
-    public Movie(String title, String description, int thumbnail, int cover, String studio, float rating, String stremingLink, ArrayList<Cast> cast) {
-        this.title = title;
-        this.description = description;
-        this.thumbnail = thumbnail;
-        this.studio = studio;
-        this.rating = rating;
-        this.streamingLink = stremingLink;
-        this.cover = cover;
-        this.cast = cast;
-        this._id = -1;
-
+    public int getMovieId() {
+        return movieId;
     }
 
-    public int getCover() {
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(int cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
@@ -82,27 +76,19 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
-    public String getStudio() {
-        return studio;
-    }
-
-    public void setStudio(String studio) {
-        this.studio = studio;
-    }
-
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

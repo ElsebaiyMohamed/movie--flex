@@ -69,18 +69,19 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+
         //test
         controller = new DbController(getContext());
         controller.open();
 
         //favorite RecyclerView adapter and arrayList
+
         film.clear();
-
         film = controller.selectAllMovie();
-
-        adapter = new MovieFavAdapter(film, (MovieItemClickListener) this);
+        adapter = new MovieFavAdapter(getContext(), film, (MovieItemClickListener) this);
         favoriteMovies = view.findViewById(R.id.fav);
-        favoriteMovies.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        favoriteMovies.setLayoutManager(new LinearLayoutManager(getActivity(),
+                RecyclerView.VERTICAL, false));
         favoriteMovies.setAdapter(adapter);
         return view;
     }
@@ -90,8 +91,8 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
         if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
             intent.putExtra("movie", movie);
-
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                    movieImageView, "sharedName");
             startActivity(intent, options.toBundle());
         }
     }
@@ -100,6 +101,5 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
     public void onDestroyView() {
         super.onDestroyView();
         controller.close();
-
     }
 }
