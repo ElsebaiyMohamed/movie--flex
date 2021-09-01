@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,16 +9,51 @@
     tools:context=".ui.fragments.SearchFragment">
 
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+<!--    <androidx.appcompat.widget.SearchView-->
+<!--        android:id="@+id/search_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
 
-        android:background="@drawable/search_shape"
-        android:iconifiedByDefault="false"
-        android:paddingLeft="10dp"
-        android:queryHint="Movie Name" />
+<!--        android:background="@drawable/search_shape"-->
+<!--        android:iconifiedByDefault="false"-->
+<!--        android:paddingLeft="10dp"-->
+<!--        android:queryHint="Movie Name" />-->
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:hint="Search Area"
+            android:background="@drawable/search_shape"
+            android:textColor="@color/red"
+            android:textSize="22sp"
+            android:paddingLeft="10dp"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:id="@+id/btnSearch"
+            android:icon="@drawable/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_result"
