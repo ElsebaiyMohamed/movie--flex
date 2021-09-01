@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
-import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 
@@ -24,26 +23,17 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
+public class SearchLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
+    final String UTubeLink = "https://www.youtube.com/watch?v=";
+    private static final String frontLink="https://api.themoviedb.org/3/search/movie?api_key=452671fab9e5a7eb0349b6139855d282&query=";
     ArrayList<Movie> movies = new ArrayList<>();
     String url = null;
-    final String frontLink = "https://api.themoviedb.org/3/";
-    final String backLink = "?api_key=452671fab9e5a7eb0349b6139855d282";
     final String trial = "/videos";
     final String actors = "/credits";
-    final String UTubeLink = "https://www.youtube.com/watch?v=";
-    final String tag;
-    ArrayList<Movie> m = new ArrayList<>();
-    DbController controller = new DbController(getContext());
-
-
-    public MovieTaskLoader(@NonNull Context context, String url, String tag) {
+    public SearchLoader(@NonNull Context context, String url) {
         super(context);
         this.url = url;
-        this.tag = tag;
-        controller.open();
-        m = controller.selectAllMovie();
     }
 
     @Nullable
@@ -51,7 +41,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     public ArrayList<Movie> loadInBackground() {
         // Parsing JSON Object
         try {
-            String jsonString = getHttpRequest(new URL(frontLink + tag + url + backLink));
+            String jsonString = getHttpRequest(new URL(frontLink + url));
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             final int resultLength = jsonArray.length();
@@ -65,14 +55,13 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                 String poster = movies.getString("poster_path");
                 String description = movies.getString("overview");
 
-                String jsonTrial = getHttpRequest(new URL(frontLink + tag + id + trial + backLink));
+                String jsonTrial = getHttpRequest(new URL(frontLink +id + trial));
                 JSONObject trialObject = new JSONObject(jsonTrial);
                 String trial1 = null;
-                if (trialObject.has("Key"))
-                    trial1 = UTubeLink + trialObject.getString("Key");
+                if (trialObject.has("key"))
+                    trial1 = UTubeLink + trialObject.getString("key");
 
-
-                String jsonCast = getHttpRequest(new URL(frontLink + tag + id + actors + backLink));
+                String jsonCast = getHttpRequest(new URL(frontLink + id + actors));
                 JSONObject castObject = new JSONObject(jsonCast);
                 JSONArray castArray = castObject.getJSONArray("cast");
                 ArrayList<Cast> actorsList = new ArrayList<>();
@@ -82,16 +71,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                     if (cast2.has("name"))
                         actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
                 }
-
-                long _id = -1;
-                for (Movie x : m) {
-
-                    if (x.getTitle().equals(title)) {
-                        _id = x.get_id();
-                        break;
-                    }
-                }
-                this.movies.add(new Movie(_id, id, title, description, poster, coverLink, rate, trial1, actorsList));
+                this.movies.add(new Movie(-1, id, title, description, poster, coverLink, rate, trial1, actorsList));
             }
         } catch (JSONException | IOException e) {
             e.printStackTrace();

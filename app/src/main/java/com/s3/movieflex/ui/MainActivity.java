@@ -2,6 +2,7 @@ package com.s3.movieflex.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -19,17 +20,15 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bnv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+
         setContentView(R.layout.activity_main);
         bnv = findViewById(R.id.nav_bar);
         bnv.setOnItemSelectedListener(navMethod);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
-
-
     }
     private NavigationBarView.OnItemSelectedListener navMethod = new NavigationBarView.OnItemSelectedListener() {
         @SuppressLint("NonConstantResourceId")
@@ -48,10 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
-
-
             return true;
         }
     };
-
 }
