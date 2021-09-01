@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
+import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 
@@ -34,11 +35,16 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     final String actors = "/credits";
     final String UTubeLink = "https://www.youtube.com/watch?v=";
     final String tag;
+    ArrayList<Movie> m = new ArrayList<>();
+    DbController controller = new DbController(getContext());
+
 
     public MovieTaskLoader(@NonNull Context context, String url, String tag) {
         super(context);
         this.url = url;
         this.tag = tag;
+        controller.open();
+        m = controller.selectAllMovie();
     }
 
     @Nullable
@@ -63,8 +69,8 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                 String jsonTrial = getHttpRequest(new URL(frontLink + tag + id + trial + backLink));
                 JSONObject trialObject = new JSONObject(jsonTrial);
                 String trial1 = null;
-                if (trialObject.has("key"))
-                    trial1 = UTubeLink + trialObject.getString("key");
+                if (trialObject.has("Key"))
+                    trial1 = UTubeLink + trialObject.getString("Key");
 
 
                 String jsonCast = getHttpRequest(new URL(frontLink + tag + id + actors + backLink));
@@ -77,7 +83,16 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                     if (cast2.has("name"))
                         actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
                 }
-                this.movies.add(new Movie(-1, id, title, description, poster, coverLink, rate, trial1, actorsList));
+
+                long _id = -1;
+                for (Movie x : m) {
+
+                    if (x.getTitle().equals(title)) {
+                        _id = x.get_id();
+                        break;
+                    }
+                }
+                this.movies.add(new Movie(_id, id, title, description, poster, coverLink, rate, trial1, actorsList));
             }
         } catch (JSONException | IOException e) {
             e.printStackTrace();

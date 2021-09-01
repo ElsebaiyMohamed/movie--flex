@@ -22,10 +22,10 @@ public class SliderPagerAdapter extends PagerAdapter {
     private final MovieItemClickListener movieItemClickListener;
     private final String baseURL="https://image.tmdb.org/t/p/original";
 
-    public SliderPagerAdapter(Context mContext, ArrayList<Movie> mList,MovieItemClickListener movieItemClickListener) {
+    public SliderPagerAdapter(Context mContext, ArrayList<Movie> mList, MovieItemClickListener movieItemClickListener) {
         this.mContext = mContext;
         this.mList = mList;
-        this.movieItemClickListener=movieItemClickListener;
+        this.movieItemClickListener = movieItemClickListener;
     }
 
     @NonNull

@@ -1,5 +1,7 @@
 package com.s3.movieflex.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.CastAdapter;
 import com.s3.movieflex.adapters.sqlite.DbController;
@@ -31,6 +34,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     ImageButton favorite;
     String trail;
     DbController controller;
+    FloatingActionButton openTrail;
     private final String baseURL = "https://image.tmdb.org/t/p/original";
 
     @Override
@@ -49,6 +53,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieTitle = findViewById(R.id.detail_movie_title);
         movieDesc = findViewById(R.id.detail_movie_desc);
         favorite = findViewById(R.id.fav_btn);
+        openTrail = findViewById(R.id.trial);
 
     }
 
@@ -75,7 +80,13 @@ public class MovieDetailActivity extends AppCompatActivity {
             movieCover.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_photo));
             getSupportActionBar().setTitle(movieDetail.getTitle());
 
-
+            openTrail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(movieDetail.getStreamingLink()));
+                    startActivity(intent);
+                }
+            });
             castAdapter = new CastAdapter(this, cast);
             rvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rvCast.setAdapter(castAdapter);

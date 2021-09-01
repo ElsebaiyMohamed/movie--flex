@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -29,7 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class HomeFragment extends Fragment implements MovieItemClickListener {
+public class HomeFragment extends Fragment implements MovieItemClickListener, LoaderManager.LoaderCallbacks {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,6 +60,14 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private final String movieTag = "movie/";
+    private final String tvTag = "tv/";
+    private final String movieUpcomingUrl = "upcoming";
+    private final String moviepopularUrl = "popular";
+    private final String movieTopRatedUrl = "top_rated";
+    private final String movieNowPlayingUrl = "now_playing";
+    private final String tvTopRatedUrl = "top_rated";
+    private final String tvPopularUrl = "upcoming";
+    private final String tvonAirUrl = "on_the_air";
 
 
     ArrayList<Movie> lstMovie = new ArrayList<>();
@@ -70,7 +82,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     RecyclerView moviesRV, moviesTop, moviesPlaying, tvTop, tvPopular, tvOnAir;
     ViewPager sliderPager;
-    private final String tvTag = "tv/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +90,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
 
-
         }
+
     }
 
     @Override
@@ -99,61 +110,23 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
 
+
+        LoaderManager.getInstance(this).initLoader(1, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(2, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(3, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(4, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(5, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(6, null, this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(7, null, this).forceLoad();
+
+
         controller = new DbController(getContext());
         controller.open();
-        MovieTaskLoader loader = new MovieTaskLoader(requireContext(), "upcoming", movieTag);
-        lstMovie = loader.loadInBackground();
-        SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstMovie, this);
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 4000, 6000);
-        sliderPager.setAdapter(adapter);
-        indicators.setupWithViewPager(sliderPager, true);
 
 
-        //popular movies
-        MovieTaskLoader loader1 = new MovieTaskLoader(requireContext(), "popular", movieTag);
-        lstMoviePopular = loader1.loadInBackground();
-        MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, this);
-        moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        moviesRV.setAdapter(adapter1);
 
 
-        //top rated movies
-        MovieTaskLoader loader2 = new MovieTaskLoader(requireContext(), "top_rated", movieTag);
-        lstMovieTop = loader2.loadInBackground();
-        MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, this);
-        moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        moviesTop.setAdapter(adapter2);
 
-
-        //playing movies
-        MovieTaskLoader loader3 = new MovieTaskLoader(requireContext(), "now_playing", movieTag);
-        lstMoviePlaying = loader3.loadInBackground();
-        MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, this);
-        moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        moviesPlaying.setAdapter(adapter3);
-
-
-        //top tv shows
-        MovieTaskLoader loader4 = new MovieTaskLoader(requireContext(), "top_rated", tvTag);
-        lstTvTop = loader4.loadInBackground();
-        MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, this);
-        tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        tvTop.setAdapter(adapter4);
-
-        //popular tv
-        MovieTaskLoader loader5 = new MovieTaskLoader(requireContext(), "popular", tvTag);
-        lstTvPopular = loader5.loadInBackground();
-        MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, this);
-        tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        tvPopular.setAdapter(adapter5);
-
-        //on the air tv
-        MovieTaskLoader loader6 = new MovieTaskLoader(requireContext(), "on_the_air", tvTag);
-        lstTvOnAir = loader6.loadInBackground();
-        MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, this);
-        tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        tvOnAir.setAdapter(adapter6);
 
         return view;
     }
@@ -174,6 +147,82 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
+    }
+
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int id, @Nullable Bundle args) {
+        switch (id) {
+            case 1:
+                return new MovieTaskLoader(getContext(), movieUpcomingUrl, movieTag);
+
+            case 2:
+                return new MovieTaskLoader(getContext(), moviepopularUrl, movieTag);
+            case 3:
+                return new MovieTaskLoader(getContext(), movieTopRatedUrl, movieTag);
+            case 4:
+                return new MovieTaskLoader(getContext(), movieNowPlayingUrl, movieTag);
+            case 5:
+                return new MovieTaskLoader(getContext(), tvTopRatedUrl, tvTag);
+            case 6:
+                return new MovieTaskLoader(getContext(), tvPopularUrl, tvTag);
+
+            case 7:
+                return new MovieTaskLoader(getContext(), tvonAirUrl, tvTag);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader loader, Object data) {
+        if (loader.getId() == 1) {
+            lstMovie = (ArrayList<Movie>) data;
+            SliderPagerAdapter adapter = new SliderPagerAdapter(getContext(), lstMovie, this);
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 3000, 5000);
+            sliderPager.setAdapter(adapter);
+            indicators.setupWithViewPager(sliderPager, true);
+            adapter.notifyDataSetChanged();
+
+
+        } else if (loader.getId() == 2) {
+            lstMoviePopular = (ArrayList<Movie>) data;
+            MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, this);
+            moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            moviesRV.setAdapter(adapter1);
+        } else if (loader.getId() == 3) {
+            lstMovieTop = (ArrayList<Movie>) data;
+            MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, this);
+            moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            moviesTop.setAdapter(adapter2);
+        } else if (loader.getId() == 4) {
+            lstMoviePlaying = (ArrayList<Movie>) data;
+            MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, this);
+            moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            moviesPlaying.setAdapter(adapter3);
+        } else if (loader.getId() == 5) {
+            lstTvTop = (ArrayList<Movie>) data;
+            MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, this);
+            tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tvTop.setAdapter(adapter4);
+        } else if (loader.getId() == 6) {
+            lstTvPopular = (ArrayList<Movie>) data;
+            MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, this);
+            tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tvPopular.setAdapter(adapter5);
+        } else if (loader.getId() == 7) {
+            lstTvOnAir = (ArrayList<Movie>) data;
+            MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, this);
+            tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tvOnAir.setAdapter(adapter6);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+
     }
 
 
