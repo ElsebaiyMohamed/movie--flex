@@ -8,12 +8,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public final static String DbName = "favorite";
     // Table 1
     public final static String TABLE1 = "MOVIES";
-    public final static String TAB1_COLO1 = "_ID";
+    public final static String TAB1_COLO1 = "MOVIE_ID";
     public final static String TAB1_COLO2 = "TITLE";
     public final static String TAB1_COLO3 = "DESCRIPTION";
     public final static String TAB1_COLO4 = "THUMBNAIL";
     public final static String TAB1_COLO5 = "COVER";
-    public final static String TAB1_COLO6 = "MOVIE_ID";
     public final static String TAB1_COLO7 = "RATING";
     public final static String TAB1_COLO8 = "STREAM_LINK";
 
@@ -24,12 +23,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public final static String TAB2_COLO3 = "PHOTO";
     private final static int DbVersion = 1;
     private final static String CREATE_TABLE1 = "CREATE TABLE " + TABLE1 + " (" +
-            TAB1_COLO1 + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
+            TAB1_COLO1 + " INTEGER PRIMARY KEY ," +
             TAB1_COLO2 + " TEXT NOT NULL ," +
             TAB1_COLO3 + " TEXT NOT NULL ," +
             TAB1_COLO4 + " TEXT ," +
             TAB1_COLO5 + " TEXT ," +
-            TAB1_COLO6 + " INTEGER NOT NULL," +
             TAB1_COLO7 + " REAL ," +
             TAB1_COLO8 + " TEXT  )";
     private final static String CREATE_TABLE2 = "CREATE TABLE " + TABLE2 + " (" +

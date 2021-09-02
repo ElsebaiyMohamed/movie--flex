@@ -138,8 +138,8 @@ public class HomeFragment extends Fragment implements MovieItemClickListener, Lo
         m = controller.selectAllMovie();
         for (Movie x : m) {
 
-            if (x.getTitle().equals(movie.getTitle())) {
-                movie.set_id(x.get_id());
+            if (x.getMovieId() == movie.getMovieId()) {
+                movie.setMovieId(x.getMovieId());
                 break;
             }
         }

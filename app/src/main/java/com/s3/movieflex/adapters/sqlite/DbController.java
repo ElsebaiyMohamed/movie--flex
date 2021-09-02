@@ -20,16 +20,16 @@ public class DbController {
     }
     public long addMovie(Movie movie) {
         ContentValues values = new ContentValues();
+        values.put(DbHelper.TAB1_COLO1, movie.getMovieId());
         values.put(DbHelper.TAB1_COLO2, movie.getTitle());
         values.put(DbHelper.TAB1_COLO3, movie.getDescription());
         values.put(DbHelper.TAB1_COLO4, movie.getThumbnail());
         values.put(DbHelper.TAB1_COLO5, movie.getCover());
-        values.put(DbHelper.TAB1_COLO6, movie.getMovieId());
         values.put(DbHelper.TAB1_COLO7, movie.getRating());
         values.put(DbHelper.TAB1_COLO8, movie.getStreamingLink() + "m");
-        long id = database.insert(DbHelper.TABLE1, DbHelper.TAB1_COLO8, values);
-        addMovieCast(id, movie.getCast());
-        return id;
+        database.insert(DbHelper.TABLE1, null, values);
+        addMovieCast(movie.getMovieId(), movie.getCast());
+        return movie.getMovieId();
     }
     private void addMovieCast(long id, ArrayList<Cast> casts) {
         ContentValues contentValues = new ContentValues();
@@ -44,17 +44,15 @@ public class DbController {
         deleteCast(id);
         database.delete(DbHelper.TABLE1, DbHelper.TAB1_COLO1 + "=" + id, null);
     }
+
     private void deleteCast(long id) {
         database.delete(DbHelper.TABLE2, DbHelper.TAB2_COLO1 + "=" + id, null);
     }
-    public Movie selectMovie(long id) {
+
+    public boolean selectMovie(long id) {
         Cursor cursor = database.rawQuery("SELECT * from " + DbHelper.TABLE1 + " where " + DbHelper.TAB1_COLO1 + " = " + id, null);
         cursor.moveToFirst();
-        if (cursor.isBeforeFirst()) {
-            return new Movie(-1);
-        } else {
-            return new Movie(cursor.getLong(0));
-        }
+        return !cursor.isBeforeFirst();
     }
 
     public ArrayList<Movie> selectAllMovie() {
@@ -63,10 +61,10 @@ public class DbController {
         Cursor cursor = database.rawQuery("SELECT * from " + DbHelper.TABLE1, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            c1 = selectCast(cursor.getInt(0));
-            movies.add(new Movie(cursor.getInt(5) ,cursor.getInt(0), cursor.getString(1),
+            c1 = selectCast(cursor.getLong(0));
+            movies.add(new Movie(cursor.getLong(0), cursor.getString(1),
                     cursor.getString(2), cursor.getString(3), cursor.getString(4),
-                    cursor.getFloat(6), cursor.getString(7), c1));
+                    cursor.getFloat(5), cursor.getString(6), c1));
             cursor.moveToNext();
         }
         return movies;

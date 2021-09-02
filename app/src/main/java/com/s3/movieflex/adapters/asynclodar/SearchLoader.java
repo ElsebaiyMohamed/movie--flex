@@ -71,7 +71,7 @@ public class SearchLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                     if (cast2.has("name"))
                         actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
                 }
-                this.movies.add(new Movie(-1, id, title, description, poster, coverLink, rate, trial1, actorsList));
+                this.movies.add(new Movie(id, title, description, poster, coverLink, rate, trial1, actorsList));
             }
         } catch (JSONException | IOException e) {
             e.printStackTrace();

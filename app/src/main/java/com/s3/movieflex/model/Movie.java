@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Movie implements Serializable {
-    private long _id;
-    private int movieId;
+    private long movieId;
     private double rating;
     private String title;
     private String description;
@@ -23,17 +22,17 @@ public class Movie implements Serializable {
         this.rating = movie.getRating();
         this.streamingLink = movie.streamingLink;
         this.cover = movie.getCover();
-        this._id = movie.get_id();
+        this.movieId = movie.getMovieId();
     }
 
-    public Movie(long _id) {
-        this._id = _id;
+    public Movie(long movieId) {
+        this.movieId = movieId;
     }
 
     // MOVIE TASK LOADER
-    public Movie(long _id ,int movieId, String title, String description, String thumbnail,
+    public Movie(long movieId, String title, String description, String thumbnail,
                  String cover, double rating, String stremingLink, ArrayList<Cast> cast) {
-        this.movieId=movieId;
+        this.movieId = movieId;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -41,14 +40,13 @@ public class Movie implements Serializable {
         this.streamingLink = stremingLink;
         this.cover = cover;
         this.cast = cast;
-        this._id = _id;
     }
 
-    public int getMovieId() {
+    public long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(int movieId) {
+    public void setMovieId(long movieId) {
         this.movieId = movieId;
     }
 
@@ -106,13 +104,5 @@ public class Movie implements Serializable {
 
     public void setCast(ArrayList<Cast> cast) {
         this.cast = cast;
-    }
-
-    public long get_id() {
-        return _id;
-    }
-
-    public void set_id(long _id) {
-        this._id = _id;
     }
 }

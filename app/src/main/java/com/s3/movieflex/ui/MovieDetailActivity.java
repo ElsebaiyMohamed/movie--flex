@@ -63,12 +63,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         controller.open();
         if (getIntent() != null) {
             movieDetail = (Movie) getIntent().getExtras().getSerializable("movie");
-            Movie m = new Movie(controller.selectMovie(movieDetail.get_id()));
-            if (m.get_id() == -1) {
-                favorite.setBackgroundResource(R.drawable.ic_baseline_favorite);
-                movieDetail.set_id(-1);
-            } else {
+            boolean is = controller.selectMovie(movieDetail.getMovieId());
+            if (is) {
                 favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
+                //movieDetail.setMovieId(-1);
+            } else {
+                favorite.setBackgroundResource(R.drawable.ic_baseline_favorite);
             }
             Glide.with(this).load(baseURL + movieDetail.getThumbnail()).into(movieImg);
             Glide.with(this).load(baseURL + movieDetail.getCover()).into(movieCover);
@@ -94,15 +94,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (movieDetail.get_id() != -1) {
+                    if (is) {
                         favorite.setBackgroundResource(R.drawable.ic_baseline_favorite);
-                        controller.delete(movieDetail.get_id());
-                        movieDetail.set_id(-1);
+                        controller.delete(movieDetail.getMovieId());
+                        //movieDetail.setMovieId(-1);
                         Toast.makeText(getApplicationContext(), "remove", Toast.LENGTH_SHORT).show();
 
                     } else {
                         favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
-                        movieDetail.set_id(controller.addMovie(movieDetail));
+                        movieDetail.setMovieId(controller.addMovie(movieDetail));
                         Toast.makeText(getApplicationContext(), "favorite", Toast.LENGTH_SHORT).show();
 
 
