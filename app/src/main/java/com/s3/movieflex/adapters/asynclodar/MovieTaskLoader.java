@@ -58,7 +58,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
             for (int i = 0; i < resultLength; i++) {
                 JSONObject movies = jsonArray.getJSONObject(i);
                 int id = movies.getInt("id");
-                double rate = movies.getDouble("vote_average");
+                float rate = Float.parseFloat(String.valueOf(movies.getDouble("vote_average")));
                 String title = null;
                 title = movies.getString("title");
                 String coverLink = movies.getString("backdrop_path");

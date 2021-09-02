@@ -17,7 +17,6 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieFavAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.sqlite.DbController;
-import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.Movie;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
@@ -59,7 +58,6 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
     MovieFavAdapter adapter;
     ArrayList<Movie> film = new ArrayList<>();
-    ArrayList<Cast> casts = new ArrayList<>();
     RecyclerView favoriteMovies;
     DbController controller;
 

@@ -3,6 +3,7 @@ package com.s3.movieflex.ui.fragments;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +25,7 @@ import com.s3.movieflex.ui.MovieDetailActivity;
 
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment implements MovieItemClickListener, LoaderManager.LoaderCallbacks {
+public class SearchFragment extends Fragment implements MovieItemClickListener/*, LoaderManager.LoaderCallbacks */ {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,11 +80,19 @@ public class SearchFragment extends Fragment implements MovieItemClickListener, 
         search_result = view.findViewById(R.id.search_result);
         searchButton = view.findViewById(R.id.btnSearch);
         searchEditText = view.findViewById(R.id.searchEditText);
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         searchButton.setOnClickListener(view1 -> {
             str = searchEditText.getText().toString();
-            LoaderManager.getInstance(this).initLoader(1, null, this);
+            SearchLoader loader = new SearchLoader(getContext(), str);
+            adapter = new MovieFavAdapter(getContext(), loader.loadInBackground(), (MovieItemClickListener) this);
+            search_result.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+            search_result.setAdapter(adapter);
+            // LoaderManager.getInstance(this).initLoader(1, null, this).forceLoad();
+
         });
+
+
         return view;
     }
 
@@ -102,10 +107,11 @@ public class SearchFragment extends Fragment implements MovieItemClickListener, 
             startActivity(intent, options.toBundle());
         }
     }
-
+/*
     @NonNull
     @Override
     public Loader onCreateLoader(int id, @Nullable Bundle args) {
+        Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
         return new SearchLoader(getContext(), str);
     }
 
@@ -119,5 +125,5 @@ public class SearchFragment extends Fragment implements MovieItemClickListener, 
     @Override
     public void onLoaderReset(@NonNull Loader loader) {
 
-    }
+    }*/
 }

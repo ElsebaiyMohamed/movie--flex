@@ -49,8 +49,8 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
         Movie film = fList.get(position);
         //assign the data to each view element
         holder.fTitle.setText(film.getTitle());
-        holder.fRate.setText(film.getRating() + "/10");
-        Glide.with(context).load(baseURL+film.getThumbnail()).into(holder.fImage);
+        holder.fRate.setText((film.getRating()) + "/10");
+        Glide.with(context).load(baseURL + film.getThumbnail()).into(holder.fImage);
     }
 
     // to get number of elements on the list
@@ -64,7 +64,6 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
 
         //the first item
         private final TextView fTitle;
-        private final TextView fStudio;
         private final TextView fRate;
 
         //the second item
@@ -75,7 +74,6 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
             super(itemView);
             //make the class see each item that will be hold
             fTitle = (TextView) itemView.findViewById(R.id.fav_name);
-            fStudio = (TextView) itemView.findViewById(R.id.fav_studio);
             fRate = (TextView) itemView.findViewById(R.id.fav_rate);
             fImage = (ImageView) itemView.findViewById(R.id.fav_img);
             layout=(LinearLayout) itemView.findViewById(R.id.labeled);

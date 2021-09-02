@@ -26,11 +26,14 @@ import javax.net.ssl.HttpsURLConnection;
 public class SearchLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
     final String UTubeLink = "https://www.youtube.com/watch?v=";
-    private static final String frontLink="https://api.themoviedb.org/3/search/movie?api_key=452671fab9e5a7eb0349b6139855d282&query=";
-    ArrayList<Movie> movies = new ArrayList<>();
-    String url = null;
+    final String frontSearchLink = "https://api.themoviedb.org/3/search/movie?api_key=452671fab9e5a7eb0349b6139855d282&query=";
+    final String frontLink = "https://api.themoviedb.org/3/";
+    final String backLink = "?api_key=452671fab9e5a7eb0349b6139855d282";
     final String trial = "/videos";
     final String actors = "/credits";
+    ArrayList<Movie> movies = new ArrayList<>();
+    String url = null;
+
     public SearchLoader(@NonNull Context context, String url) {
         super(context);
         this.url = url;
@@ -41,27 +44,27 @@ public class SearchLoader extends AsyncTaskLoader<ArrayList<Movie>> {
     public ArrayList<Movie> loadInBackground() {
         // Parsing JSON Object
         try {
-            String jsonString = getHttpRequest(new URL(frontLink + url));
+            String jsonString = getHttpRequest(new URL(frontSearchLink + url));
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             final int resultLength = jsonArray.length();
             for (int i = 0; i < resultLength; i++) {
                 JSONObject movies = jsonArray.getJSONObject(i);
                 int id = movies.getInt("id");
-                double rate = movies.getDouble("vote_average");
+                float rate = Float.parseFloat(String.valueOf(movies.getDouble("vote_average")));
                 String title = null;
                 title = movies.getString("title");
                 String coverLink = movies.getString("backdrop_path");
                 String poster = movies.getString("poster_path");
                 String description = movies.getString("overview");
 
-                String jsonTrial = getHttpRequest(new URL(frontLink +id + trial));
+                String jsonTrial = getHttpRequest(new URL(frontLink + id + trial + backLink));
                 JSONObject trialObject = new JSONObject(jsonTrial);
                 String trial1 = null;
                 if (trialObject.has("key"))
                     trial1 = UTubeLink + trialObject.getString("key");
 
-                String jsonCast = getHttpRequest(new URL(frontLink + id + actors));
+                String jsonCast = getHttpRequest(new URL(frontLink + id + actors + backLink));
                 JSONObject castObject = new JSONObject(jsonCast);
                 JSONArray castArray = castObject.getJSONArray("cast");
                 ArrayList<Cast> actorsList = new ArrayList<>();

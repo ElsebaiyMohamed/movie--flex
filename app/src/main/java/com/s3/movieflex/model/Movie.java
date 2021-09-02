@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Movie implements Serializable {
     private long movieId;
-    private double rating;
+    private float rating;
     private String title;
     private String description;
     private String thumbnail;
@@ -31,7 +31,7 @@ public class Movie implements Serializable {
 
     // MOVIE TASK LOADER
     public Movie(long movieId, String title, String description, String thumbnail,
-                 String cover, double rating, String stremingLink, ArrayList<Cast> cast) {
+                 String cover, float rating, String stremingLink, ArrayList<Cast> cast) {
         this.movieId = movieId;
         this.title = title;
         this.description = description;
@@ -82,11 +82,11 @@ public class Movie implements Serializable {
         this.thumbnail = thumbnail;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
