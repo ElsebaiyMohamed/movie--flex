@@ -68,10 +68,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                 String jsonTrial = getHttpRequest(new URL(frontLink + tag + id + trial + backLink));
                 JSONObject trialObject = new JSONObject(jsonTrial);
                 String trial1 = null;
-                if (trialObject.has("key"))
-                    trial1 = UTubeLink + trialObject.getString("key");
-
-
+                    trial1 = UTubeLink + trialObject.getJSONArray("results").getJSONObject(0).getString("key");
                 String jsonCast = getHttpRequest(new URL(frontLink + tag + id + actors + backLink));
                 JSONObject castObject = new JSONObject(jsonCast);
                 JSONArray castArray = castObject.getJSONArray("cast");
@@ -82,7 +79,6 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
                     if (cast2.has("name"))
                         actorsList.add(new Cast(cast2.getString("name"), cast2.getString("profile_path")));
                 }
-
                 this.movies.add(new Movie(id, title, description, poster, coverLink, rate, trial1, actorsList));
             }
 
