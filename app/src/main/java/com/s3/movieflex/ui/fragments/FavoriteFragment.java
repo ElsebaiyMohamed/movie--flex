@@ -17,7 +17,7 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieFavAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.sqlite.DbController;
-import com.s3.movieflex.model.Movie;
+import com.s3.movieflex.model.MovieModel;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
     }
 
     MovieFavAdapter adapter;
-    ArrayList<Movie> film = new ArrayList<>();
+    ArrayList<MovieModel> film = new ArrayList<>();
     RecyclerView favoriteMovies;
     DbController controller;
 
@@ -85,7 +85,7 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
     }
 
     @Override
-    public void onMovieClick(Movie movie, ImageView movieImageView) {
+    public void onMovieClick(MovieModel movie, ImageView movieImageView) {
         if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
             intent.putExtra("movie", movie);

@@ -3,17 +3,13 @@ package com.s3.movieflex.ui.fragments;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -23,17 +19,22 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.SliderPagerAdapter;
-import com.s3.movieflex.adapters.asynclodar.MovieTaskLoader;
+import com.s3.movieflex.adapters.retrofit.RetrofitClient;
+import com.s3.movieflex.adapters.retrofit.jsonRespons;
 import com.s3.movieflex.adapters.sqlite.DbController;
-import com.s3.movieflex.model.Movie;
+import com.s3.movieflex.model.MovieModel;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class HomeFragment extends Fragment implements MovieItemClickListener, LoaderManager.LoaderCallbacks {
+
+public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,24 +60,24 @@ public class HomeFragment extends Fragment implements MovieItemClickListener, Lo
         return fragment;
     }
 
-    private final String movieTag = "movie/";
-    private final String tvTag = "tv/";
+    private final String movieTag = "movie";
+    private final String tvTag = "tv";
     private final String movieUpcomingUrl = "upcoming";
     private final String moviepopularUrl = "popular";
     private final String movieTopRatedUrl = "top_rated";
     private final String movieNowPlayingUrl = "now_playing";
     private final String tvTopRatedUrl = "top_rated";
-    private final String tvPopularUrl = "upcoming";
+    private final String tvPopularUrl = "popular";
     private final String tvonAirUrl = "on_the_air";
 
 
-    ArrayList<Movie> lstMovie = new ArrayList<>();
-    ArrayList<Movie> lstMovieTop = new ArrayList<>();
-    ArrayList<Movie> lstMoviePopular = new ArrayList<>();
-    ArrayList<Movie> lstMoviePlaying = new ArrayList<>();
-    ArrayList<Movie> lstTvTop = new ArrayList<>();
-    ArrayList<Movie> lstTvPopular = new ArrayList<>();
-    ArrayList<Movie> lstTvOnAir = new ArrayList<>();
+    ArrayList<MovieModel> lstMovie = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstMovieTop = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstMoviePopular = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstMoviePlaying = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstTvTop = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstTvPopular = new ArrayList<MovieModel>();
+    ArrayList<MovieModel> lstTvOnAir = new ArrayList<MovieModel>();
     TabLayout indicators;
     DbController controller;
 
@@ -99,8 +100,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener, Lo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         indicators = view.findViewById(R.id.indicators);
         sliderPager = view.findViewById(R.id.slider_pager);
         moviesRV = view.findViewById(R.id.Rv_movies);
@@ -109,37 +108,189 @@ public class HomeFragment extends Fragment implements MovieItemClickListener, Lo
         tvTop = view.findViewById(R.id.Rv_tv_top);
         tvPopular = view.findViewById(R.id.Rv_tv_popular);
         tvOnAir = view.findViewById(R.id.Rv_tv_on_air);
-
-
-        LoaderManager.getInstance(this).initLoader(1, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(2, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(3, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(4, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(5, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(6, null, this).forceLoad();
-        LoaderManager.getInstance(this).initLoader(7, null, this).forceLoad();
-
-
         controller = new DbController(getContext());
         controller.open();
 
-
-
-
+        fillLists();
 
 
         return view;
     }
 
-    @Override
-    public void onMovieClick(Movie movie, ImageView movieImageView) {
-        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        ArrayList<Movie> m = new ArrayList<>();
-        m = controller.selectAllMovie();
-        for (Movie x : m) {
+    private void fillLists() {
+        upComingMovies();
+        popularMovies();
+        topRatedMovies();
+        /*nowPlayingMovies();
+        topRatedTvShows();
+        popularTvShows();
+        onTheAirTvShows();*/
+    }
 
-            if (x.getMovieId() == movie.getMovieId()) {
-                movie.setMovieId(x.getMovieId());
+
+    private void upComingMovies() {
+        RetrofitClient.getRetrofitData().getMovies(movieTag, movieUpcomingUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstMovie.addAll(response.body().getResults());
+                    SliderPagerAdapter adapter = new SliderPagerAdapter(getContext(), lstMovie, HomeFragment.this::onMovieClick);
+                    Timer timer = new Timer();
+                    timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 3000, 5000);
+                    sliderPager.setAdapter(adapter);
+                    indicators.setupWithViewPager(sliderPager, true);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void popularMovies() {
+        RetrofitClient.getRetrofitData().getMovies(movieTag, moviepopularUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstMoviePopular.addAll(response.body().getResults());
+                    MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, HomeFragment.this::onMovieClick);
+                    moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    moviesRV.setAdapter(adapter1);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+
+
+    }
+
+    private void topRatedMovies() {
+        RetrofitClient.getRetrofitData().getMovies(movieTag, movieTopRatedUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstMovieTop.addAll(response.body().getResults());
+                    MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, HomeFragment.this::onMovieClick);
+                    moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    moviesTop.setAdapter(adapter2);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+    }
+
+    private void nowPlayingMovies() {
+        RetrofitClient.getRetrofitData().getMovies(movieTag, movieNowPlayingUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstMoviePlaying.addAll(response.body().getResults());
+                    MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, HomeFragment.this::onMovieClick);
+                    moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    moviesPlaying.setAdapter(adapter3);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+    }
+
+
+    private void topRatedTvShows() {
+        RetrofitClient.getRetrofitData().getMovies(movieTag, tvTopRatedUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstTvTop.addAll(response.body().getResults());
+                    MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, HomeFragment.this::onMovieClick);
+                    tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    tvTop.setAdapter(adapter4);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+
+    }
+
+    private void popularTvShows() {
+
+        RetrofitClient.getRetrofitData().getMovies(tvTag, tvPopularUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstTvPopular.addAll(response.body().getResults());
+                    MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, HomeFragment.this::onMovieClick);
+                    tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    tvPopular.setAdapter(adapter5);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+
+
+    }
+
+    private void onTheAirTvShows() {
+        RetrofitClient.getRetrofitData().getMovies(tvTag, tvonAirUrl).enqueue(new Callback<jsonRespons>() {
+            @Override
+            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    lstTvOnAir.addAll(response.body().getResults());
+                    MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, HomeFragment.this::onMovieClick);
+                    tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+                    tvOnAir.setAdapter(adapter6);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+
+
+    }
+
+
+    @Override
+    public void onMovieClick(MovieModel movie, ImageView movieImageView) {
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        ArrayList<MovieModel> m = new ArrayList<>();
+        m = controller.selectAllMovie();
+        for (MovieModel x : m) {
+
+            if (x.getId() == movie.getId()) {
+                movie.setId(x.getId());
                 break;
             }
         }
@@ -148,84 +299,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener, Lo
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
     }
-
-    @NonNull
-    @Override
-    public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        switch (id) {
-            case 1:
-                return new MovieTaskLoader(getContext(), movieUpcomingUrl, movieTag);
-
-            case 2:
-                return new MovieTaskLoader(getContext(), moviepopularUrl, movieTag);
-            case 3:
-                return new MovieTaskLoader(getContext(), movieTopRatedUrl, movieTag);
-            case 4:
-                return new MovieTaskLoader(getContext(), movieNowPlayingUrl, movieTag);
-            case 5:
-                return new MovieTaskLoader(getContext(), tvTopRatedUrl, tvTag);
-            case 6:
-                return new MovieTaskLoader(getContext(), tvPopularUrl, tvTag);
-
-            case 7:
-                return new MovieTaskLoader(getContext(), tvonAirUrl, tvTag);
-        }
-
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader loader, Object data) {
-        if (loader.getId() == 1) {
-            lstMovie = (ArrayList<Movie>) data;
-            SliderPagerAdapter adapter = new SliderPagerAdapter(getContext(), lstMovie, this);
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new HomeFragment.SliderTimer(), 3000, 5000);
-            sliderPager.setAdapter(adapter);
-            indicators.setupWithViewPager(sliderPager, true);
-            adapter.notifyDataSetChanged();
-
-
-        } else if (loader.getId() == 2) {
-            lstMoviePopular = (ArrayList<Movie>) data;
-            MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, this);
-            moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            moviesRV.setAdapter(adapter1);
-        } else if (loader.getId() == 3) {
-            lstMovieTop = (ArrayList<Movie>) data;
-            MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, this);
-            moviesTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            moviesTop.setAdapter(adapter2);
-        } else if (loader.getId() == 4) {
-            lstMoviePlaying = (ArrayList<Movie>) data;
-            MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, this);
-            moviesPlaying.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            moviesPlaying.setAdapter(adapter3);
-        } else if (loader.getId() == 5) {
-            lstTvTop = (ArrayList<Movie>) data;
-            MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, this);
-            tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            tvTop.setAdapter(adapter4);
-        } else if (loader.getId() == 6) {
-            lstTvPopular = (ArrayList<Movie>) data;
-            MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, this);
-            tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            tvPopular.setAdapter(adapter5);
-        } else if (loader.getId() == 7) {
-            lstTvOnAir = (ArrayList<Movie>) data;
-            MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, this);
-            tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-            tvOnAir.setAdapter(adapter6);
-        }
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader loader) {
-
-    }
-
-
     public class SliderTimer extends TimerTask {
         @Override
         public void run() {

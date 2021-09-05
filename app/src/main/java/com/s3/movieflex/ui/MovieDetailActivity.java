@@ -1,7 +1,5 @@
 package com.s3.movieflex.ui;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +17,7 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.CastAdapter;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
-import com.s3.movieflex.model.Movie;
+import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
@@ -30,7 +27,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     RecyclerView rvCast;
     ArrayList<Cast> cast = new ArrayList<>();
     CastAdapter castAdapter;
-    Movie movieDetail;
+    MovieModel movieDetail;
     ImageButton favorite;
     String trail;
     DbController controller;
@@ -62,47 +59,48 @@ public class MovieDetailActivity extends AppCompatActivity {
         controller = new DbController(getApplicationContext());
         controller.open();
         if (getIntent() != null) {
-            movieDetail = (Movie) getIntent().getExtras().getSerializable("movie");
-            boolean is = controller.selectMovie(movieDetail.getMovieId());
+            movieDetail = (MovieModel) getIntent().getExtras().getSerializable("movie");
+            boolean is = controller.selectMovie(movieDetail.getId());
             if (is) {
                 favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
                 //movieDetail.setMovieId(-1);
             } else {
                 favorite.setBackgroundResource(R.drawable.ic_baseline_favorite);
             }
-            Glide.with(this).load(baseURL + movieDetail.getThumbnail()).into(movieImg);
-            Glide.with(this).load(baseURL + movieDetail.getCover()).into(movieCover);
-            trail = movieDetail.getStreamingLink();
+            Glide.with(this).load(baseURL + movieDetail.getPoster_path()).into(movieImg);
+            Glide.with(this).load(baseURL + movieDetail.getBackdrop_path()).into(movieCover);
+            //trail = movieDetail.getStreamingLink();
             movieTitle.setText(movieDetail.getTitle());
-            movieDesc.setText(movieDetail.getDescription());
-            cast = movieDetail.getCast();
+            movieDesc.setText(movieDetail.getOverview());
+            // cast = movieDetail.getCast();
 
             movieCover.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_photo));
             getSupportActionBar().setTitle(movieDetail.getTitle());
 
-            openTrail.setOnClickListener(new View.OnClickListener() {
+          /*  openTrail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(movieDetail.getStreamingLink()));
                     startActivity(intent);
                 }
-            });
-            castAdapter = new CastAdapter(this, cast);
+            });*/
+           /* castAdapter = new CastAdapter(this, cast);
             rvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            rvCast.setAdapter(castAdapter);
+            rvCast.setAdapter(castAdapter);*/
 
             favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (is) {
                         favorite.setBackgroundResource(R.drawable.ic_baseline_favorite);
-                        controller.delete(movieDetail.getMovieId());
+                        controller.delete(movieDetail.getId());
                         //movieDetail.setMovieId(-1);
                         Toast.makeText(getApplicationContext(), "remove", Toast.LENGTH_SHORT).show();
 
                     } else {
                         favorite.setBackgroundResource(R.drawable.ic_baseline_favorite_red);
-                        movieDetail.setMovieId(controller.addMovie(movieDetail));
+                        movieDetail.setId(controller.addMovie(movieDetail));
+
                         Toast.makeText(getApplicationContext(), "favorite", Toast.LENGTH_SHORT).show();
 
 

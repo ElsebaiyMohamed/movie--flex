@@ -12,17 +12,17 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
-import com.s3.movieflex.model.Movie;
+import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
 public class SliderPagerAdapter extends PagerAdapter {
     private final Context mContext;
-    private ArrayList<Movie> mList = new ArrayList<>();
+    private ArrayList<MovieModel> mList = new ArrayList<>();
     private final MovieItemClickListener movieItemClickListener;
     private final String baseURL="https://image.tmdb.org/t/p/original";
 
-    public SliderPagerAdapter(Context mContext, ArrayList<Movie> mList, MovieItemClickListener movieItemClickListener) {
+    public SliderPagerAdapter(Context mContext, ArrayList<MovieModel> mList, MovieItemClickListener movieItemClickListener) {
         this.mContext = mContext;
         this.mList = mList;
         this.movieItemClickListener = movieItemClickListener;
@@ -35,7 +35,7 @@ public class SliderPagerAdapter extends PagerAdapter {
         View slideLayout =inflater.inflate(R.layout.slide_item,container,false);
         ImageView slideImg =slideLayout.findViewById(R.id.slide_img);
         TextView  slideText =slideLayout.findViewById(R.id.slide_title);
-        Glide.with(mContext).load(baseURL+mList.get(position).getThumbnail()).into(slideImg);
+        Glide.with(mContext).load(baseURL + mList.get(position).getPoster_path()).into(slideImg);
         slideText.setText(mList.get(position).getTitle());
         slideImg.setOnClickListener(new View.OnClickListener() {
             @Override

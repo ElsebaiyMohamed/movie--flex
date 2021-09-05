@@ -1,32 +1,9 @@
 package com.s3.movieflex.ui.fragments;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.s3.movieflex.R;
-import com.s3.movieflex.adapters.MovieFavAdapter;
-import com.s3.movieflex.adapters.MovieItemClickListener;
-import com.s3.movieflex.adapters.asynclodar.SearchLoader;
-import com.s3.movieflex.model.Cast;
-import com.s3.movieflex.model.Movie;
-import com.s3.movieflex.ui.MovieDetailActivity;
-
-import java.util.ArrayList;
-
-public class SearchFragment extends Fragment implements MovieItemClickListener/*, LoaderManager.LoaderCallbacks */ {
-
+public class SearchFragment extends Fragment /*implements MovieItemClickListener*//*, LoaderManager.LoaderCallbacks */ {
+/*
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -97,7 +74,7 @@ public class SearchFragment extends Fragment implements MovieItemClickListener/*
     }
 
     @Override
-    public void onMovieClick(Movie movie, ImageView movieImageView) {
+    public void onMovieClick(MovieModel movie, ImageView movieImageView) {
         if (getActivity() != null) {
 
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
@@ -126,4 +103,5 @@ public class SearchFragment extends Fragment implements MovieItemClickListener/*
     public void onLoaderReset(@NonNull Loader loader) {
 
     }*/
+
 }

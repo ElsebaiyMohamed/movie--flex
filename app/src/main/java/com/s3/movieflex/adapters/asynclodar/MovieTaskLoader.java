@@ -42,8 +42,7 @@ public class MovieTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
         super(context);
         this.url = url;
         this.tag = tag;
-        controller.open();
-        m = controller.selectAllMovie();
+
     }
 
     @Nullable

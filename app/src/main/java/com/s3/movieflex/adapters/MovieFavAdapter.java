@@ -14,21 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
-import com.s3.movieflex.model.Movie;
+import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
 public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHolder> {
     // arraylist to hold movies data
-    static ArrayList<Movie> fList;
+    static ArrayList<MovieModel> fList;
     //our custom listener te check the item clicked or no
     static MovieItemClickListener movieItemClickListener;
     private final String baseURL="https://image.tmdb.org/t/p/original";
     private final Context context;
-    public MovieFavAdapter(Context context,ArrayList<Movie> fList, MovieItemClickListener listener) {
+
+    public MovieFavAdapter(Context context, ArrayList<MovieModel> fList, MovieItemClickListener listener) {
         MovieFavAdapter.fList = fList;
         movieItemClickListener = listener;
-        this.context=context;
+        this.context = context;
     }
 
     @NonNull
@@ -46,11 +47,11 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //get the data from array list
-        Movie film = fList.get(position);
+        MovieModel film = fList.get(position);
         //assign the data to each view element
         holder.fTitle.setText(film.getTitle());
-        holder.fRate.setText((film.getRating()) + "/10");
-        Glide.with(context).load(baseURL + film.getThumbnail()).into(holder.fImage);
+        holder.fRate.setText((film.getVote_average()) + "/10");
+        Glide.with(context).load(baseURL + film.getPoster_path()).into(holder.fImage);
     }
 
     // to get number of elements on the list
