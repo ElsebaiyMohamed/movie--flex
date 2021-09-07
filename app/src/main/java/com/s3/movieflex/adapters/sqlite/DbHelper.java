@@ -21,15 +21,15 @@ public class DbHelper extends SQLiteOpenHelper {
     public final static String TAB2_COLO1 = "_ID";
     public final static String TAB2_COLO2 = "NAME";
     public final static String TAB2_COLO3 = "PHOTO";
-    private final static int DbVersion = 1;
-    private final static String CREATE_TABLE1 = "CREATE TABLE " + TABLE1 + " (" +
+    private final static int DbVersion = 2;
+    private final static String CREATE_TABLE1 = "CREATE TABLE " + TABLE1 + " ( " +
             TAB1_COLO1 + " INTEGER PRIMARY KEY ," +
-            TAB1_COLO2 + " TEXT NOT NULL ," +
-            TAB1_COLO3 + " TEXT NOT NULL ," +
-            TAB1_COLO4 + " TEXT ," +
-            TAB1_COLO5 + " TEXT ," +
-            TAB1_COLO6 + "TEXT ," +
-            TAB1_COLO7 + " REAL )";
+            TAB1_COLO2 + " TEXT NOT NULL , " +
+            TAB1_COLO3 + " TEXT NOT NULL , " +
+            TAB1_COLO4 + " TEXT , " +
+            TAB1_COLO5 + " TEXT , " +
+            TAB1_COLO6 + " TEXT , " +
+            TAB1_COLO7 + " REAL ) ";
     private final static String CREATE_TABLE2 = "CREATE TABLE " + TABLE2 + " (" +
             TAB2_COLO1 + " INTEGER NOT NULL ," +
             TAB2_COLO2 + " TEXT NOT NULL ," +

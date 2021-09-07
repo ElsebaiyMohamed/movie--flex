@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s3.movieflex.model.MovieModel;
+import com.s3.movieflex.model.TvModel;
 
 import java.util.ArrayList;
 
 public class DbController {
     private final DbHelper databaseHelper;
     private SQLiteDatabase database;
+
     public DbController(Context context) {
         databaseHelper = new DbHelper(context);
     }
@@ -20,18 +22,32 @@ public class DbController {
         database = databaseHelper.getWritableDatabase();
     }
 
-    public int addMovie(MovieModel MovieModel) {
+    public int addMovie(MovieModel movieModel) {
         ContentValues values = new ContentValues();
-        values.put(DbHelper.TAB1_COLO1, MovieModel.getId());
-        values.put(DbHelper.TAB1_COLO2, MovieModel.getTitle());
-        values.put(DbHelper.TAB1_COLO3, MovieModel.getOverview());
-        values.put(DbHelper.TAB1_COLO4, MovieModel.getPoster_path());
-        values.put(DbHelper.TAB1_COLO5, MovieModel.getBackdrop_path());
-        values.put(DbHelper.TAB1_COLO6, MovieModel.getRelease_date());
-        values.put(DbHelper.TAB1_COLO7, MovieModel.getVote_average());
+        values.put(DbHelper.TAB1_COLO1, movieModel.getId());
+        values.put(DbHelper.TAB1_COLO2, movieModel.getTitle());
+        values.put(DbHelper.TAB1_COLO3, movieModel.getOverview());
+        values.put(DbHelper.TAB1_COLO4, movieModel.getPoster_path());
+        values.put(DbHelper.TAB1_COLO5, movieModel.getBackdrop_path());
+        values.put(DbHelper.TAB1_COLO6, movieModel.getRelease_date());
+        values.put(DbHelper.TAB1_COLO7, movieModel.getVote_average());
         database.insert(DbHelper.TABLE1, null, values);
         //addMovieCast(MovieModel.getId(), MovieModel.getCast());
-        return MovieModel.getId();
+        return movieModel.getId();
+    }
+
+    public int addTvShow(TvModel movieModel) {
+        ContentValues values = new ContentValues();
+        values.put(DbHelper.TAB1_COLO1, movieModel.getId());
+        values.put(DbHelper.TAB1_COLO2, movieModel.getName());
+        values.put(DbHelper.TAB1_COLO3, movieModel.getOverview());
+        values.put(DbHelper.TAB1_COLO4, movieModel.getPoster_path());
+        values.put(DbHelper.TAB1_COLO5, movieModel.getBackdrop_path());
+        values.put(DbHelper.TAB1_COLO6, movieModel.getRelease_date());
+        values.put(DbHelper.TAB1_COLO7, movieModel.getVote_average());
+        database.insert(DbHelper.TABLE1, null, values);
+        //addMovieCast(MovieModel.getId(), MovieModel.getCast());
+        return movieModel.getId();
     }
 
     /* private void addMovieCast(long id, ArrayList<Cast> casts) {
@@ -43,19 +59,22 @@ public class DbController {
          }
          database.insert(DbHelper.TABLE2, null, contentValues);
      }*/
-    public void delete(long id) {
+    public void delete(int id) {
         //  deleteCast(id);
         database.delete(DbHelper.TABLE1, DbHelper.TAB1_COLO1 + "=" + id, null);
     }
 
-    /* private void deleteCast(long id) {
+    /* private void deleteCast(int id) {
          database.delete(DbHelper.TABLE2, DbHelper.TAB2_COLO1 + "=" + id, null);
      }
  */
-    public boolean selectMovie(long id) {
-        Cursor cursor = database.rawQuery("SELECT * from " + DbHelper.TABLE1 + " where " + DbHelper.TAB1_COLO1 + " = " + id, null);
+    public boolean selectMovie(int id) {
+        Cursor cursor = database.rawQuery("SELECT * from " + DbHelper.TABLE1 +
+                " where " + DbHelper.TAB1_COLO1 + " = " + id, null);
         cursor.moveToFirst();
         return !cursor.isBeforeFirst();
+
+
     }
 
     public ArrayList<MovieModel> selectAllMovie() {
@@ -73,7 +92,7 @@ public class DbController {
         return movies;
     }
 
-    /* private ArrayList<Cast> selectCast(long id) {
+    /* private ArrayList<Cast> selectCast(int id) {
          ArrayList<Cast> cast = new ArrayList<>();
          Cursor cursor = database.rawQuery("SELECT * from " + DbHelper.TABLE2, null);
          cursor.moveToFirst();

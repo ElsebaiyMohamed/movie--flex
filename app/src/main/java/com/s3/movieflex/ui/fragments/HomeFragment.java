@@ -1,5 +1,6 @@
 package com.s3.movieflex.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +20,14 @@ import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.MovieAdapter;
 import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.adapters.SliderPagerAdapter;
+import com.s3.movieflex.adapters.TvAdapter;
+import com.s3.movieflex.adapters.TvItemClickListener;
+import com.s3.movieflex.adapters.retrofit.JsonMovieRespons;
+import com.s3.movieflex.adapters.retrofit.JsonTvRespons;
 import com.s3.movieflex.adapters.retrofit.RetrofitClient;
-import com.s3.movieflex.adapters.retrofit.jsonRespons;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.MovieModel;
+import com.s3.movieflex.model.TvModel;
 import com.s3.movieflex.ui.MovieDetailActivity;
 
 import java.util.ArrayList;
@@ -34,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment implements MovieItemClickListener {
+public class HomeFragment extends Fragment implements MovieItemClickListener, TvItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,8 +65,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         return fragment;
     }
 
-    private final String movieTag = "movie";
-    private final String tvTag = "tv";
+
     private final String movieUpcomingUrl = "upcoming";
     private final String moviepopularUrl = "popular";
     private final String movieTopRatedUrl = "top_rated";
@@ -75,9 +79,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     ArrayList<MovieModel> lstMovieTop = new ArrayList<MovieModel>();
     ArrayList<MovieModel> lstMoviePopular = new ArrayList<MovieModel>();
     ArrayList<MovieModel> lstMoviePlaying = new ArrayList<MovieModel>();
-    ArrayList<MovieModel> lstTvTop = new ArrayList<MovieModel>();
-    ArrayList<MovieModel> lstTvPopular = new ArrayList<MovieModel>();
-    ArrayList<MovieModel> lstTvOnAir = new ArrayList<MovieModel>();
+    ArrayList<TvModel> lstTvTop = new ArrayList<com.s3.movieflex.model.TvModel>();
+    ArrayList<TvModel> lstTvPopular = new ArrayList<TvModel>();
+    ArrayList<TvModel> lstTvOnAir = new ArrayList<TvModel>();
     TabLayout indicators;
     DbController controller;
 
@@ -121,17 +125,17 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         upComingMovies();
         popularMovies();
         topRatedMovies();
-        /*nowPlayingMovies();
+        nowPlayingMovies();
         topRatedTvShows();
         popularTvShows();
-        onTheAirTvShows();*/
+        onTheAirTvShows();
     }
 
 
     private void upComingMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieTag, movieUpcomingUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieUpcomingUrl).enqueue(new Callback<JsonMovieRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMovie.addAll(response.body().getResults());
                     SliderPagerAdapter adapter = new SliderPagerAdapter(getContext(), lstMovie, HomeFragment.this::onMovieClick);
@@ -144,26 +148,29 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
-                Log.i("TAG", "onFailure: " + t.getMessage());
+            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+                Log.i("TAG", "onFailure: upcoming " + t.getMessage());
             }
         });
     }
 
     private void popularMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieTag, moviepopularUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(moviepopularUrl).enqueue(new Callback<JsonMovieRespons>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMoviePopular.addAll(response.body().getResults());
                     MovieAdapter adapter1 = new MovieAdapter(getContext(), lstMoviePopular, HomeFragment.this::onMovieClick);
                     moviesRV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                     moviesRV.setAdapter(adapter1);
+                    adapter1.notifyDataSetChanged();
+
                 }
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -173,9 +180,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void topRatedMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieTag, movieTopRatedUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieTopRatedUrl).enqueue(new Callback<JsonMovieRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMovieTop.addAll(response.body().getResults());
                     MovieAdapter adapter2 = new MovieAdapter(getContext(), lstMovieTop, HomeFragment.this::onMovieClick);
@@ -186,7 +193,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -194,9 +201,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void nowPlayingMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieTag, movieNowPlayingUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieNowPlayingUrl).enqueue(new Callback<JsonMovieRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMoviePlaying.addAll(response.body().getResults());
                     MovieAdapter adapter3 = new MovieAdapter(getContext(), lstMoviePlaying, HomeFragment.this::onMovieClick);
@@ -206,7 +213,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -215,19 +222,19 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
 
     private void topRatedTvShows() {
-        RetrofitClient.getRetrofitData().getMovies(movieTag, tvTopRatedUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvTopRatedUrl).enqueue(new Callback<JsonTvRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonTvRespons> call, Response<JsonTvRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvTop.addAll(response.body().getResults());
-                    MovieAdapter adapter4 = new MovieAdapter(getContext(), lstTvTop, HomeFragment.this::onMovieClick);
+                    TvAdapter adapter4 = new TvAdapter(getContext(), lstTvTop, HomeFragment.this::onTvClick);
                     tvTop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                     tvTop.setAdapter(adapter4);
                 }
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonTvRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -237,12 +244,12 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     private void popularTvShows() {
 
-        RetrofitClient.getRetrofitData().getMovies(tvTag, tvPopularUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvPopularUrl).enqueue(new Callback<JsonTvRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonTvRespons> call, Response<JsonTvRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvPopular.addAll(response.body().getResults());
-                    MovieAdapter adapter5 = new MovieAdapter(getContext(), lstTvPopular, HomeFragment.this::onMovieClick);
+                    TvAdapter adapter5 = new TvAdapter(getContext(), lstTvPopular, HomeFragment.this::onTvClick);
                     tvPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                     tvPopular.setAdapter(adapter5);
                 }
@@ -250,7 +257,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonTvRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -260,19 +267,19 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void onTheAirTvShows() {
-        RetrofitClient.getRetrofitData().getMovies(tvTag, tvonAirUrl).enqueue(new Callback<jsonRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvonAirUrl).enqueue(new Callback<JsonTvRespons>() {
             @Override
-            public void onResponse(Call<jsonRespons> call, Response<jsonRespons> response) {
+            public void onResponse(Call<JsonTvRespons> call, Response<JsonTvRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvOnAir.addAll(response.body().getResults());
-                    MovieAdapter adapter6 = new MovieAdapter(getContext(), lstTvOnAir, HomeFragment.this::onMovieClick);
+                    TvAdapter adapter6 = new TvAdapter(getContext(), lstTvOnAir, HomeFragment.this::onTvClick);
                     tvOnAir.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                     tvOnAir.setAdapter(adapter6);
                 }
             }
 
             @Override
-            public void onFailure(Call<jsonRespons> call, Throwable t) {
+            public void onFailure(Call<JsonTvRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -281,11 +288,10 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     }
 
-
     @Override
-    public void onMovieClick(MovieModel movie, ImageView movieImageView) {
+    public void onTvClick(TvModel movie, ImageView movieImageView) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        ArrayList<MovieModel> m = new ArrayList<>();
+      /* ArrayList<MovieModel> m = new ArrayList<>();
         m = controller.selectAllMovie();
         for (MovieModel x : m) {
 
@@ -293,12 +299,37 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
                 movie.setId(x.getId());
                 break;
             }
-        }
+        }*/
+        Log.i("TAG", "onMovieClick: " + movie.getName());
+        intent.putExtra("type", "tv");
+        intent.putExtra("movie", movie);
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
+        startActivity(intent, options.toBundle());
+
+    }
+
+
+    @Override
+    public void onMovieClick(MovieModel movie, ImageView movieImageView) {
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+      /* ArrayList<MovieModel> m = new ArrayList<>();
+        m = controller.selectAllMovie();
+        for (MovieModel x : m) {
+
+            if (x.getId() == movie.getId()) {
+                movie.setId(x.getId());
+                break;
+            }
+        }*/
+        Log.i("TAG", "onMovieClick: " + movie.getTitle());
+        intent.putExtra("type", "movie");
         intent.putExtra("movie", movie);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
     }
+
     public class SliderTimer extends TimerTask {
         @Override
         public void run() {
@@ -315,6 +346,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
         }
     }
+
 
     @Override
     public void onDestroyView() {
