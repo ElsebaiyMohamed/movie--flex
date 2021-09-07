@@ -1,4 +1,4 @@
-package com.s3.movieflex.adapters;
+package com.s3.movieflex.adapters.movieadapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,46 +12,48 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
-import com.s3.movieflex.model.TvModel;
+import com.s3.movieflex.adapters.MovieItemClickListener;
+import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
-public class TvAdapter extends RecyclerView.Adapter<TvAdapter.ViewHolder> {
+public class MovieAdapter2 extends RecyclerView.Adapter<MovieAdapter2.ViewHolder> {
     // arraylist to hold movies data
-    static ArrayList<TvModel> fList;
+    static ArrayList<MovieModel> fList;
     //our custom listener te check the item clicked or no
-    static TvItemClickListener tvItemClickListener;
+    static MovieItemClickListener movieItemClickListener;
     private final String baseURL = "https://image.tmdb.org/t/p/original";
     private final Context context;
 
-    public TvAdapter(Context context, ArrayList<TvModel> fList, TvItemClickListener listener) {
-        TvAdapter.fList = fList;
-        TvAdapter.tvItemClickListener = listener;
+    public MovieAdapter2(Context context, ArrayList<MovieModel> fList, MovieItemClickListener listener) {
+        MovieAdapter2.fList = fList;
+        movieItemClickListener = listener;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public TvAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
         // return our view and the listener on it
-        return new TvAdapter.ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //get the data from array list
-        TvModel film = fList.get(position);
-        //assign the data to each view element
-        holder.fTitle.setText(film.getName());
-        Glide.with(context).load(baseURL + film.getPoster_path()).into(holder.fImage);
-
+        return new ViewHolder(view);
     }
 
     // take the return value of above function as argument and get the position of it in recycler view
     // Note because of the recycler view indexing and Array list starts at zero index
     // then the position of any view on recycler view is same in array lis
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //get the data from array list
+        MovieModel film = fList.get(position);
+        //assign the data to each view element
+        if (film.getTitle() != null)
+            holder.fTitle.setText(film.getTitle());
+        else
+            holder.fTitle.setText(film.getName());
 
+        Glide.with(context).load(baseURL + film.getPoster_path()).into(holder.fImage);
+    }
 
     // to get number of elements on the list
     @Override
@@ -75,10 +77,9 @@ public class TvAdapter extends RecyclerView.Adapter<TvAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tvItemClickListener.onTvClick(fList.get(getBindingAdapterPosition()), fImage);
+                    movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()), fImage);
                 }
             });
         }
     }
-
 }
