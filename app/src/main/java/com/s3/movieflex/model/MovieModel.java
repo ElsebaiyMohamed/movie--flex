@@ -9,10 +9,11 @@ public class MovieModel implements Serializable {
     private String poster_path;
     private String backdrop_path;
     private String release_date;
-    private float vote_average;
+    private String first_air_date;
+    private String name;
 
-    public MovieModel(int id, String title, String overview, String poster_path, String backdrop_path,
-                      String release_date, float vote_average) {
+    public MovieModel(int id, String title, String name, String overview, String poster_path, String backdrop_path,
+                      String release_date, String first_air_date, float vote_average) {
 
         this.id = id;
         this.title = title;
@@ -21,7 +22,28 @@ public class MovieModel implements Serializable {
         this.backdrop_path = backdrop_path;
         this.release_date = release_date;
         this.vote_average = vote_average;
+        this.name = name;
+        this.first_air_date = first_air_date;
     }
+
+    public String getFirst_air_date() {
+        return first_air_date;
+    }
+
+    public void setFirst_air_date(String first_air_date) {
+        this.first_air_date = first_air_date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private float vote_average;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     public int getId() {
         return id;

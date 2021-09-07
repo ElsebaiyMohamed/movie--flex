@@ -76,7 +76,7 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
         film.clear();
         film = controller.selectAllMovie();
-        adapter = new MovieFavAdapter(getContext(), film, (MovieItemClickListener) this);
+        adapter = new MovieFavAdapter(getContext(), film, FavoriteFragment.this);
         favoriteMovies = view.findViewById(R.id.fav);
         favoriteMovies.setLayoutManager(new LinearLayoutManager(getActivity(),
                 RecyclerView.VERTICAL, false));
@@ -100,4 +100,6 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
         super.onDestroyView();
         controller.close();
     }
+
+
 }

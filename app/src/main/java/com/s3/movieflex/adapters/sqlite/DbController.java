@@ -25,7 +25,10 @@ public class DbController {
     public int addMovie(MovieModel movieModel) {
         ContentValues values = new ContentValues();
         values.put(DbHelper.TAB1_COLO1, movieModel.getId());
-        values.put(DbHelper.TAB1_COLO2, movieModel.getTitle());
+        if (movieModel.getTitle() == null)
+            values.put(DbHelper.TAB1_COLO2, movieModel.getName());
+        else
+            values.put(DbHelper.TAB1_COLO2, movieModel.getTitle());
         values.put(DbHelper.TAB1_COLO3, movieModel.getOverview());
         values.put(DbHelper.TAB1_COLO4, movieModel.getPoster_path());
         values.put(DbHelper.TAB1_COLO5, movieModel.getBackdrop_path());
@@ -84,9 +87,9 @@ public class DbController {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             //  c1 = selectCast(cursor.getLong(0));
-            movies.add(new MovieModel(cursor.getInt(0), cursor.getString(1),
+            movies.add(new MovieModel(cursor.getInt(0), cursor.getString(1), cursor.getString(1),
                     cursor.getString(2), cursor.getString(3), cursor.getString(4),
-                    cursor.getString(6), cursor.getFloat(5)));
+                    cursor.getString(6), cursor.getString(6), cursor.getFloat(5)));
             cursor.moveToNext();
         }
         return movies;

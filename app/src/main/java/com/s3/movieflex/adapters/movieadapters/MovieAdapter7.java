@@ -1,4 +1,4 @@
-package com.s3.movieflex.adapters;
+package com.s3.movieflex.adapters.movieadapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,20 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.s3.movieflex.R;
+import com.s3.movieflex.adapters.MovieItemClickListener;
 import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter7 extends RecyclerView.Adapter<MovieAdapter7.ViewHolder> {
     // arraylist to hold movies data
     static ArrayList<MovieModel> fList;
     //our custom listener te check the item clicked or no
     static MovieItemClickListener movieItemClickListener;
-    private final String baseURL="https://image.tmdb.org/t/p/original";
+    private final String baseURL = "https://image.tmdb.org/t/p/original";
     private final Context context;
 
-    public MovieAdapter(Context context, ArrayList<MovieModel> fList, MovieItemClickListener listener) {
-        MovieAdapter.fList = fList;
+    public MovieAdapter7(Context context, ArrayList<MovieModel> fList, MovieItemClickListener listener) {
+        MovieAdapter7.fList = fList;
         movieItemClickListener = listener;
         this.context = context;
     }
@@ -46,7 +47,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         //get the data from array list
         MovieModel film = fList.get(position);
         //assign the data to each view element
-        holder.fTitle.setText(film.getTitle());
+        if (film.getTitle() != null)
+            holder.fTitle.setText(film.getTitle());
+        else
+            holder.fTitle.setText(film.getName());
+
         Glide.with(context).load(baseURL + film.getPoster_path()).into(holder.fImage);
     }
 
@@ -62,16 +67,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         private final TextView fTitle;
         //the second item
         private final ImageView fImage;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             //make the class see each item that will be hold
-            fTitle = (TextView) itemView.findViewById(R.id.film_title);
-            fImage = (ImageView) itemView.findViewById(R.id.film_img);
+            fTitle = itemView.findViewById(R.id.film_title);
+            fImage = itemView.findViewById(R.id.film_img);
             //apply our listener to final view
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()),fImage);                }
+                    movieItemClickListener.onMovieClick(fList.get(getBindingAdapterPosition()), fImage);
+                }
             });
         }
     }

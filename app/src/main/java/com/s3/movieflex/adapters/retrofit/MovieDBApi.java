@@ -9,6 +9,6 @@ public interface MovieDBApi {
     Call<JsonMovieRespons> getMovies(@Path("cate") String cate);
 
     @GET("tv/{cate}?api_key=452671fab9e5a7eb0349b6139855d282")
-    Call<JsonTvRespons> getTvShows(@Path("cate") String cate);
+    Call<JsonMovieRespons> getTvShows(@Path("cate") String cate);
 
 }
