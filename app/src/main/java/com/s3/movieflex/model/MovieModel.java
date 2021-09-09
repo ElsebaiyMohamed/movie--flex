@@ -5,12 +5,13 @@ import java.io.Serializable;
 public class MovieModel implements Serializable {
     private int id;
     private String title;
+    private String name;
     private String overview;
     private String poster_path;
     private String backdrop_path;
     private String release_date;
     private String first_air_date;
-    private String name;
+    private float vote_average;
 
     public MovieModel(int id, String title, String name, String overview, String poster_path, String backdrop_path,
                       String release_date, String first_air_date, float vote_average) {
@@ -38,7 +39,6 @@ public class MovieModel implements Serializable {
         return name;
     }
 
-    private float vote_average;
 
     public void setName(String name) {
         this.name = name;

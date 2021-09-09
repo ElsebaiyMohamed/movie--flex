@@ -3,6 +3,7 @@ package com.s3.movieflex.adapters.retrofit;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface MovieDBApi {
     String apikey = "452671fab9e5a7eb0349b6139855d282";
@@ -28,9 +29,9 @@ public interface MovieDBApi {
     Call<JSONTrailRespons> getTvShowTrail(@Path("id") int id);
 
     //search/movie?api_key=452671fab9e5a7eb0349b6139855d282&query=
-    @GET("search/movie?api_key=" + apikey + "&query={query}")
-    Call<JSONTrailRespons> searchMovie(@Path("query") String name);
+    @GET("search/movie?api_key=" + apikey + "&query=")
+    Call<JSONMovieRespons> searchMovie(@Query("query") String name);
 
-    @GET("search/tv?api_key=" + apikey + "&query={query}")
-    Call<JSONTrailRespons> searchTvShow(@Path("query") String name);
+    @GET("search/tv?api_key=" + apikey + "&query=")
+    Call<JSONMovieRespons> searchTvShow(@Query("query") String name);
 }

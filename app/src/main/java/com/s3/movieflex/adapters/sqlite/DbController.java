@@ -71,7 +71,7 @@ public class DbController {
             //  c1 = selectCast(cursor.getLong(0));
             movies.add(new MovieModel(cursor.getInt(0), cursor.getString(1), cursor.getString(1),
                     cursor.getString(2), cursor.getString(3), cursor.getString(4),
-                    cursor.getString(6), cursor.getString(6), cursor.getFloat(5)));
+                    cursor.getString(5), cursor.getString(5), cursor.getFloat(6)));
             cursor.moveToNext();
         }
         return movies;

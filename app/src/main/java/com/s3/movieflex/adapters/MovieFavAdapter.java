@@ -2,6 +2,7 @@ package com.s3.movieflex.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +37,10 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_recycler_view, parent, false);
-        // return our view and the listener on it
         return new ViewHolder(view);
     }
 
-    // take the return value of above function as argument and get the position of it in recycler view
-    // Note because of the recycler view indexing and Array list starts at zero index
-    // then the position of any view on recycler view is same in array lis
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -53,7 +51,8 @@ public class MovieFavAdapter extends RecyclerView.Adapter<MovieFavAdapter.ViewHo
             holder.fTitle.setText(film.getTitle());
         else if (film.getName() != null)
             holder.fTitle.setText(film.getName());
-        holder.fRate.setText((film.getVote_average()) + "/10");
+        holder.fRate.setText(film.getVote_average() + " / 10 ");
+        Log.i("TAG", "onBindViewHolder: rate = " + film.getVote_average());
         Glide.with(context).load(baseURL + film.getPoster_path()).into(holder.fImage);
     }
 
