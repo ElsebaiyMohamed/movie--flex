@@ -24,7 +24,13 @@ public interface MovieDBApi {
     @GET("movie/{id}/videos?api_key=" + apikey)
     Call<JSONTrailRespons> getMovieTrail(@Path("id") int id);
 
-    @GET("movie/{id}/videos?api_key=" + apikey)
+    @GET("tv/{id}/videos?api_key=" + apikey)
     Call<JSONTrailRespons> getTvShowTrail(@Path("id") int id);
 
+    //search/movie?api_key=452671fab9e5a7eb0349b6139855d282&query=
+    @GET("search/movie?api_key=" + apikey + "&query={query}")
+    Call<JSONTrailRespons> searchMovie(@Path("query") String name);
+
+    @GET("search/tv?api_key=" + apikey + "&query={query}")
+    Call<JSONTrailRespons> searchTvShow(@Path("query") String name);
 }

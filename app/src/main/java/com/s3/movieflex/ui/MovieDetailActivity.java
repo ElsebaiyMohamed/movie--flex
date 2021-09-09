@@ -1,5 +1,7 @@
 package com.s3.movieflex.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +21,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.CastAdapter;
 import com.s3.movieflex.adapters.retrofit.JSONCastRespons;
+import com.s3.movieflex.adapters.retrofit.JSONTrailRespons;
 import com.s3.movieflex.adapters.retrofit.RetrofitClient;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.MovieModel;
+import com.s3.movieflex.model.Trail;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,7 +43,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     CastAdapter castAdapter;
     MovieModel movieDetail;
     ImageButton favorite;
-    String trail;
+    String showLink;
     DbController controller;
     FloatingActionButton openTrail;
 
@@ -78,13 +83,11 @@ public class MovieDetailActivity extends AppCompatActivity {
             String baseURL = "https://image.tmdb.org/t/p/original";
             Glide.with(this).load(baseURL + movieDetail.getPoster_path()).into(movieImg);
             Glide.with(this).load(baseURL + movieDetail.getBackdrop_path()).into(movieCover);
-            //trail = movieDetail.getStreamingLink();
             if (movieDetail.getTitle() == null)
                 movieTitle.setText(movieDetail.getName());
             else
                 movieTitle.setText(movieDetail.getTitle());
             movieDesc.setText(movieDetail.getOverview());
-            // cast = movieDetail.getCast();
             movieCover.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_photo));
             Objects.requireNonNull(getSupportActionBar()).setTitle(movieDetail.getTitle());
             if (movieDetail.getTitle() != null) {
@@ -122,28 +125,54 @@ public class MovieDetailActivity extends AppCompatActivity {
                 });
             }
 
+            if (movieDetail.getTitle() != null) {
+
+                RetrofitClient.getRetrofitData().getMovieTrail(movieDetail.getId()).enqueue(new Callback<JSONTrailRespons>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JSONTrailRespons> call, @NonNull Response<JSONTrailRespons> response) {
+
+                        if (response.body().getResults() != null) {
+                            Trail getLink = response.body().getResults().get(0);
+                            showLink = "https://www.youtube.com/watch?v=" + getLink.getKey();
+                        } else
+                            showLink = "https://www.youtube.com";
+                    }
+
+                    @Override
+                    public void onFailure(Call<JSONTrailRespons> call, Throwable t) {
+                        Log.i("TAG", "onFailure: " + t.getMessage());
+                    }
+                });
+            } else {
+                RetrofitClient.getRetrofitData().getTvShowTrail(movieDetail.getId()).enqueue(new Callback<JSONTrailRespons>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JSONTrailRespons> call, @NonNull Response<JSONTrailRespons> response) {
+                        assert response.body() != null;
+                        if (null != response.body().getResults()) {
+                            Trail getLink = response.body().getResults().get(0);
+                            showLink = "https://www.youtube.com/watch?v=" + getLink.getKey();
+                        } else
+                            showLink = "https://www.youtube.com";
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JSONTrailRespons> call, @NonNull Throwable t) {
+                        Log.i("TAG", "onFailure: " + t.getMessage());
+                    }
+                });
 
 
+            }
 
 
-
-
-
-
-
-
-
-
-          /*  openTrail.setOnClickListener(new View.OnClickListener() {
+            openTrail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(movieDetail.getStreamingLink()));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(showLink));
                     startActivity(intent);
                 }
-            });*/
-           /* castAdapter = new CastAdapter(this, cast);
-            rvCast.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            rvCast.setAdapter(castAdapter);*/
+            });
+
             favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
