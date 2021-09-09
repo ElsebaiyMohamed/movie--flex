@@ -25,7 +25,7 @@ import com.s3.movieflex.adapters.movieadapters.MovieAdapter4;
 import com.s3.movieflex.adapters.movieadapters.MovieAdapter5;
 import com.s3.movieflex.adapters.movieadapters.MovieAdapter6;
 import com.s3.movieflex.adapters.movieadapters.MovieAdapter7;
-import com.s3.movieflex.adapters.retrofit.JsonMovieRespons;
+import com.s3.movieflex.adapters.retrofit.JSONMovieRespons;
 import com.s3.movieflex.adapters.retrofit.RetrofitClient;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.MovieModel;
@@ -134,9 +134,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
 
     private void upComingMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieUpcomingUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieUpcomingUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMovie.addAll(response.body().getResults());
                     SliderPagerAdapter adapter = new SliderPagerAdapter(getContext(), lstMovie, HomeFragment.this);
@@ -149,17 +149,17 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: upcoming " + t.getMessage());
             }
         });
     }
 
     private void popularMovies() {
-        RetrofitClient.getRetrofitData().getMovies(moviepopularUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(moviepopularUrl).enqueue(new Callback<JSONMovieRespons>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMoviePopular.addAll(response.body().getResults());
                     MovieAdapter2 adapter1 = new MovieAdapter2(getContext(), lstMoviePopular, HomeFragment.this);
@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -181,9 +181,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void topRatedMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieTopRatedUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieTopRatedUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMovieTop.addAll(response.body().getResults());
                     MovieAdapter3 adapter2 = new MovieAdapter3(getContext(), lstMovieTop, HomeFragment.this::onMovieClick);
@@ -194,7 +194,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -202,9 +202,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void nowPlayingMovies() {
-        RetrofitClient.getRetrofitData().getMovies(movieNowPlayingUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getMovies(movieNowPlayingUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstMoviePlaying.addAll(response.body().getResults());
                     MovieAdapter4 adapter3 = new MovieAdapter4(getContext(), lstMoviePlaying, HomeFragment.this::onMovieClick);
@@ -214,7 +214,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -223,9 +223,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
 
     private void topRatedTvShows() {
-        RetrofitClient.getRetrofitData().getTvShows(tvTopRatedUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvTopRatedUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvTop.addAll(response.body().getResults());
                     MovieAdapter5 adapter4 = new MovieAdapter5(getContext(), lstTvTop, HomeFragment.this);
@@ -235,7 +235,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -245,9 +245,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     private void popularTvShows() {
 
-        RetrofitClient.getRetrofitData().getTvShows(tvPopularUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvPopularUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvPopular.addAll(response.body().getResults());
                     MovieAdapter6 adapter5 = new MovieAdapter6(getContext(), lstTvPopular, HomeFragment.this);
@@ -258,7 +258,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -268,9 +268,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     }
 
     private void onTheAirTvShows() {
-        RetrofitClient.getRetrofitData().getTvShows(tvonAirUrl).enqueue(new Callback<JsonMovieRespons>() {
+        RetrofitClient.getRetrofitData().getTvShows(tvonAirUrl).enqueue(new Callback<JSONMovieRespons>() {
             @Override
-            public void onResponse(Call<JsonMovieRespons> call, Response<JsonMovieRespons> response) {
+            public void onResponse(Call<JSONMovieRespons> call, Response<JSONMovieRespons> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     lstTvOnAir.addAll(response.body().getResults());
                     MovieAdapter7 adapter6 = new MovieAdapter7(getContext(), lstTvOnAir, HomeFragment.this);
@@ -280,7 +280,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             }
 
             @Override
-            public void onFailure(Call<JsonMovieRespons> call, Throwable t) {
+            public void onFailure(Call<JSONMovieRespons> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
             }
@@ -288,8 +288,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
 
     }
-
-
 
 
     @Override

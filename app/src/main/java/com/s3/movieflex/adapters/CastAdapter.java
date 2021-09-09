@@ -40,7 +40,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
         //get the data from array list
         Cast cast = casts.get(position);
         //assign the data to each view element
-        Glide.with(context).load(baseURL+cast.getImgLink()).into(holder.cImage);
+        Glide.with(context).load(baseURL + cast.getProfile_path()).into(holder.cImage);
     }
 
     // to get number of elements on the list

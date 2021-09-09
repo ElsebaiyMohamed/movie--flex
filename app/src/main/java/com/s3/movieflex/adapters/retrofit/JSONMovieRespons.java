@@ -4,7 +4,7 @@ import com.s3.movieflex.model.MovieModel;
 
 import java.util.ArrayList;
 
-public class JsonMovieRespons {
+public class JSONMovieRespons {
     ArrayList<MovieModel> results;
 
     public ArrayList<MovieModel> getResults() {

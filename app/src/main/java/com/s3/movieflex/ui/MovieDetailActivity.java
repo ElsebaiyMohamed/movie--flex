@@ -1,6 +1,7 @@
 package com.s3.movieflex.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -9,19 +10,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.s3.movieflex.R;
 import com.s3.movieflex.adapters.CastAdapter;
+import com.s3.movieflex.adapters.retrofit.JSONCastRespons;
+import com.s3.movieflex.adapters.retrofit.RetrofitClient;
 import com.s3.movieflex.adapters.sqlite.DbController;
 import com.s3.movieflex.model.Cast;
 import com.s3.movieflex.model.MovieModel;
-import com.s3.movieflex.model.TvModel;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MovieDetailActivity extends AppCompatActivity {
     ImageView movieImg, movieCover;
@@ -30,7 +37,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     ArrayList<Cast> cast = new ArrayList<>();
     CastAdapter castAdapter;
     MovieModel movieDetail;
-    TvModel tvDetail;
     ImageButton favorite;
     String trail;
     DbController controller;
@@ -81,6 +87,53 @@ public class MovieDetailActivity extends AppCompatActivity {
             // cast = movieDetail.getCast();
             movieCover.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_photo));
             Objects.requireNonNull(getSupportActionBar()).setTitle(movieDetail.getTitle());
+            if (movieDetail.getTitle() != null) {
+                RetrofitClient.getRetrofitData().getMovieCast(movieDetail.getId()).enqueue(new Callback<JSONCastRespons>() {
+                    @Override
+                    public void onResponse(Call<JSONCastRespons> call, Response<JSONCastRespons> response) {
+                        cast = response.body().getCast();
+                        castAdapter = new CastAdapter(getApplicationContext(), cast);
+                        rvCast.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                        rvCast.setAdapter(castAdapter);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JSONCastRespons> call, Throwable t) {
+                        Log.i("TAG", "onFailure: " + t.getMessage());
+                    }
+                });
+            } else {
+                RetrofitClient.getRetrofitData().getTvShowsCast(movieDetail.getId()).enqueue(new Callback<JSONCastRespons>() {
+                    @Override
+                    public void onResponse(Call<JSONCastRespons> call, Response<JSONCastRespons> response) {
+
+                        cast = response.body().getCast();
+                        castAdapter = new CastAdapter(getApplicationContext(), cast);
+                        rvCast.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+                        rvCast.setAdapter(castAdapter);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JSONCastRespons> call, Throwable t) {
+                        Log.i("TAG", "onFailure: " + t.getMessage());
+                    }
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
           /*  openTrail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

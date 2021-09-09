@@ -6,22 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s3.movieflex.model.MovieModel;
-import com.s3.movieflex.model.TvModel;
 
 import java.util.ArrayList;
-
 public class DbController {
     private final DbHelper databaseHelper;
     private SQLiteDatabase database;
-
     public DbController(Context context) {
         databaseHelper = new DbHelper(context);
     }
-
     public void open() {
         database = databaseHelper.getWritableDatabase();
     }
-
     public int addMovie(MovieModel movieModel) {
         ContentValues values = new ContentValues();
         values.put(DbHelper.TAB1_COLO1, movieModel.getId());
@@ -39,19 +34,6 @@ public class DbController {
         return movieModel.getId();
     }
 
-    public int addTvShow(TvModel movieModel) {
-        ContentValues values = new ContentValues();
-        values.put(DbHelper.TAB1_COLO1, movieModel.getId());
-        values.put(DbHelper.TAB1_COLO2, movieModel.getName());
-        values.put(DbHelper.TAB1_COLO3, movieModel.getOverview());
-        values.put(DbHelper.TAB1_COLO4, movieModel.getPoster_path());
-        values.put(DbHelper.TAB1_COLO5, movieModel.getBackdrop_path());
-        values.put(DbHelper.TAB1_COLO6, movieModel.getRelease_date());
-        values.put(DbHelper.TAB1_COLO7, movieModel.getVote_average());
-        database.insert(DbHelper.TABLE1, null, values);
-        //addMovieCast(MovieModel.getId(), MovieModel.getCast());
-        return movieModel.getId();
-    }
 
     /* private void addMovieCast(long id, ArrayList<Cast> casts) {
          ContentValues contentValues = new ContentValues();
