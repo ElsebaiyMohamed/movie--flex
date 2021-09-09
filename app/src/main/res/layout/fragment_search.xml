@@ -17,9 +17,9 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="60dp"
-        android:hint="Search Area"
+        android:hint="Search Movies and Shows"
         android:background="@drawable/search_shape"
-        android:textColor="@color/red"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:paddingLeft="10dp"
         android:layout_margin="10dp" />
