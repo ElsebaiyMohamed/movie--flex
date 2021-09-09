@@ -293,7 +293,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     @Override
     public void onMovieClick(MovieModel movie, ImageView movieImageView) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-
+        Log.i("TAG", "onFailure: " + movie.getId());
         Log.i("TAG", "onMovieClick: " + movie.getTitle());
         intent.putExtra("type", "movie");
         intent.putExtra("movie", movie);

@@ -129,35 +129,33 @@ public class MovieDetailActivity extends AppCompatActivity {
 
                 RetrofitClient.getRetrofitData().getMovieTrail(movieDetail.getId()).enqueue(new Callback<JSONTrailRespons>() {
                     @Override
-                    public void onResponse(@NonNull Call<JSONTrailRespons> call, @NonNull Response<JSONTrailRespons> response) {
+                    public void onResponse(@NonNull Call<JSONTrailRespons> call, Response<JSONTrailRespons> response) {
 
-                        if (response.body().getResults() != null) {
+                        if (response.body().getResults().size() != 0) {
                             Trail getLink = response.body().getResults().get(0);
                             showLink = "https://www.youtube.com/watch?v=" + getLink.getKey();
-                        } else
-                            showLink = "https://www.youtube.com";
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<JSONTrailRespons> call, Throwable t) {
-                        Log.i("TAG", "onFailure: " + t.getMessage());
+                        Log.i("TAG", "onFailure: movie id " + movieDetail.getId());
                     }
                 });
             } else {
                 RetrofitClient.getRetrofitData().getTvShowTrail(movieDetail.getId()).enqueue(new Callback<JSONTrailRespons>() {
                     @Override
-                    public void onResponse(@NonNull Call<JSONTrailRespons> call, @NonNull Response<JSONTrailRespons> response) {
-                        assert response.body() != null;
-                        if (null != response.body().getResults()) {
+                    public void onResponse(Call<JSONTrailRespons> call, Response<JSONTrailRespons> response) {
+                        if (response.body().getResults().size() != 0) {
+
                             Trail getLink = response.body().getResults().get(0);
                             showLink = "https://www.youtube.com/watch?v=" + getLink.getKey();
-                        } else
-                            showLink = "https://www.youtube.com";
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<JSONTrailRespons> call, @NonNull Throwable t) {
-                        Log.i("TAG", "onFailure: " + t.getMessage());
+                        Log.i("TAG", "onFailure:movie id " + movieDetail.getId());
                     }
                 });
 
@@ -168,8 +166,11 @@ public class MovieDetailActivity extends AppCompatActivity {
             openTrail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(showLink));
-                    startActivity(intent);
+                    if (showLink != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(showLink));
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(getApplicationContext(), "no trail exist", Toast.LENGTH_SHORT).show();
                 }
             });
 
