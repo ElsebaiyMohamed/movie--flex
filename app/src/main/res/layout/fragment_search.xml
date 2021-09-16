@@ -12,6 +12,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
